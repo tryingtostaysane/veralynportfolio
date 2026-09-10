@@ -1,0 +1,144 @@
+/*
+  Design tokens extracted from Figma file "Veralyn-Portfolio".
+  Sources:
+    - node 366:12 "V2" page > TYPOGRAPHY / Cards / Buttons sections (BioScent case study)
+    - node 438:25289 "VisualEyes" case study
+    - node 438:25792 "CookPilot" case study
+  Values marked "inferred" were not exposed as Figma variables and are
+  estimated from the visual layer name / sibling values.
+  Note: in Figma, CookPilot's orange accent is stored under a variable
+  literally named "VisualEyes orange" (#edd0ba) - it's shared between the
+  two case studies, not a naming mistake made here.
+*/
+
+:root {
+  /* ---------- Color: neutrals (shared) ---------- */
+  --color-grey-bg: #f5f5f5;
+  --color-sidebar-bg: rgba(245, 245, 245, 0.7); /* HOME page (471:1204) sidebar fill */
+  --color-grey-04: #5d5d5d;
+  --color-black: #000000;
+  --color-white: #ffffff;
+
+  /* ---------- Color: BioScent ---------- */
+  --color-bioscent-green: #73804a;
+  --color-bioscent-green-light: #e4e5cd;
+  --color-bioscent-forest: #323224;
+
+  /* ---------- Color: VisualEyes ---------- */
+  --color-visualeyes-blue: #c6e7f6;
+  --color-visualeyes-dark-blue: #49788d;
+  --color-visualeyes-orange: #edd0ba; /* shared accent, also used by CookPilot */
+
+  /* ---------- Color: CookPilot ---------- */
+  --color-cookpilot-orange: #edd0ba;       /* same value as --color-visualeyes-orange */
+  --color-cookpilot-dark-orange: #d28143;
+
+  /* ---------- Typography ---------- */
+  --font-heading: "Source Serif 4", serif;   /* Figma: "Source Serif 4 36pt" */
+  /* Figma pins the variable font's optical-size axis to 36 (the "36pt" cut)
+     uniformly across every heading level, regardless of rendered font-size.
+     Google serves Source Serif 4 as a variable font when the CSS request
+     includes the opsz axis (see index.html) - without pinning opsz here,
+     the browser falls back to a smaller/default optical cut that reads
+     noticeably heavier and flatter at display sizes. */
+  --font-optical-sizing-heading: none;
+  --font-variation-heading: "opsz" 36;
+  --font-body: "TikTok Sans", sans-serif;    /* Figma: "TikTok Sans", Regular (400) */
+  --font-body-alt: "Source Sans 3", sans-serif; /* used for case-study "Body"/"Body 2" styles */
+  --font-subheader: "PT Serif", serif;          /* used for case-study "Subheader" style */
+
+  --font-weight-body: 400;
+
+  /* Per-level heading weight: these track live edits to the shared Figma
+     text styles and have flipped more than once - always re-check
+     get_variable_defs before trusting this table.
+     Current: Display XL & H3 = Regular (400); H1 & H2 = Medium (500);
+     H4 = Regular (400), confirmed via HOME nav links (471:1204). */
+  --font-weight-display-xl: 400;
+  --font-weight-h1: 500;
+  --font-weight-h2: 500;
+  --font-weight-h3: 400;
+  --font-weight-h4: 400;
+
+  /* Display / Headers (shared across BioScent, VisualEyes, CookPilot) */
+  --text-display-xl-size: 72px;
+  --text-display-xl-line-height: 1.2;
+
+  --text-h1-size: 64px;
+  --text-h1-line-height: 1;
+
+  --text-h2-size: 48px;
+  --text-h2-line-height: 1.2;
+
+  --text-h3-size: 32px;
+  --text-h3-line-height: 1.2;
+
+  --text-h4-size: 24px;
+  --text-h4-line-height: 1.2;
+
+  /* Body (shared) */
+  --text-body-lg-size: 24px;
+  --text-body-lg-line-height: 1.3;
+
+  --text-body-md-size: 20px;
+  --text-body-md-line-height: 1.2;
+
+  /* Case-study-specific text styles (VisualEyes / CookPilot) */
+  --text-body-alt-size: 16px;        /* "Body" (Source Sans 3) */
+  --text-body-alt-line-height: 1;
+
+  --text-body-alt-2-size: 20px;      /* "Body 2" (Source Sans 3) */
+  --text-body-alt-2-line-height: 1;
+
+  --text-subheader-size: 20px;       /* "Subheader" (PT Serif) */
+  --text-subheader-line-height: 1;
+  --text-subheader-letter-spacing: -3px; /* as reported by Figma; verify in-file, unusually tight */
+
+  /* ---------- Spacing ---------- */
+  /* Recurring gap/padding values observed across Cards, Buttons, and tag/pill components */
+  --space-1: 8px;
+  --space-2: 12px;
+  --space-3: 16px;
+  --space-4: 24px;
+  --space-5: 32px;
+  --space-6: 40px;
+  --space-7: 80px;
+  --space-8: 160px;
+
+  /* One-off asymmetric card padding (not on the base scale above) */
+  --space-card-padding-top: 35px;
+  --space-card-padding-right: 33px;
+  --space-card-padding-bottom: 26px;
+  --space-card-padding-left: 30px;
+
+  /* Tag/pill padding (VisualEyes/CookPilot section labels) */
+  --space-tag-padding-x: 40px;
+  --space-tag-padding-y: 12px;
+
+  /* HOME work-card (471:1204): outer padding is 20px - not on the base
+     scale above (nearest was 16px, which earlier versions of this file
+     used incorrectly). Top-level gap between [image+heading], the
+     divider rule, and the meta block is 40px (space-6). */
+  --space-work-card-padding: 20px;
+  --space-work-card-gap: var(--space-6);
+
+  /* HOME sidebar (471:1204): contact block is pinned to the bottom of
+     the sidebar again (justify-content: space-between in Home.css) -
+     this value is now the MINIMUM gap between [intro+divider+nav] and
+     the contact block, not a fixed gap; inner gap is between intro /
+     divider / nav within that group; intro gap (name-to-bio) is back
+     on the base scale (40px) as of a previous edit - it briefly went
+     to 48px. Contact block is plain stacked body text (no separate
+     heading treatment or gap of its own). */
+  --space-sidebar-outer-gap: var(--space-7);
+  --space-sidebar-inner-gap: var(--space-6);
+  --space-sidebar-intro-gap: var(--space-6);
+
+  /* ---------- Radii ---------- */
+  --radius-xs: 5px;      /* HOME sidebar container */
+  --radius-sm: 16px;     /* case-study image rectangles */
+  --radius-image: 15px;  /* HOME work-card thumbnails */
+  --radius-card: 20px;   /* BioScent Cards section / HOME work-cards */
+  --radius-pill: 30px;   /* section-label tags/pills */
+  --radius-full: 9999px; /* Buttons: 40px radius on a 48px box = fully circular */
+}

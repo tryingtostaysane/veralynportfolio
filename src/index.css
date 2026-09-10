@@ -1,0 +1,27 @@
+@import "../tokens/design-tokens.css";
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--color-white);
+  color: var(--color-black);
+  font-family: var(--font-body);
+  /* Chrome/Safari on macOS render text with subpixel AA by default, which
+     reads visibly heavier than Figma's own text engine at the same weight.
+     Forcing grayscale AA is the standard fix to match design-tool rendering. */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+#root {
+  min-height: 100vh;
+}
