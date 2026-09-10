@@ -1,7 +1,11 @@
+import { useEffect, useState } from 'react'
 import bioscentImg from '../assets/work-cards/bioscent.jpg'
 import cookpilotImg from '../assets/work-cards/cookpilot.jpg'
 import visualeyesImg from '../assets/work-cards/visualeyes.jpg'
 import './Home.css'
+
+const INSTRUCTION_HOLD_MS = 4800
+const INSTRUCTION_FADE_MS = 700
 
 const works = [
   {
@@ -30,6 +34,24 @@ const works = [
       label: 'Awards \u{1F3C6}:',
       lines: ['ICON UNSW x Lyra ’26 | 1st Place'],
     },
+    cookingInstructions: [
+      {
+        label: 'Step 1 of 5',
+        text: ['Toast bread slices in pan or toaster until golden ', { highlight: 'brown.' }],
+        meta: '4 min',
+      },
+      {
+        label: 'Step 2 of 5',
+        text: ['Fry spam bacon in a pan on medium heat until cooked ', { highlight: 'through.' }],
+        meta: '5 min',
+      },
+      {
+        label: 'Cooking assistant',
+        icon: '✨',
+        text: ['Spam looks pale and starting to cook. Keep frying on ', { highlight: 'medium' }, ' until brown and hot'],
+        meta: null,
+      },
+    ],
   },
   {
     id: 'visualeyes',
@@ -45,11 +67,72 @@ const works = [
   },
 ]
 
-function WorkCard({ id, image, title, description, role, team, reveal }) {
+function CookingInstructions({ instructions }) {
+  const [index, setIndex] = useState(0)
+  const [visible, setVisible] = useState(true)
+
+  useEffect(() => {
+    const holdTimer = setTimeout(() => setVisible(false), INSTRUCTION_HOLD_MS)
+    return () => clearTimeout(holdTimer)
+  }, [index])
+
+  useEffect(() => {
+    if (visible) return
+    const fadeTimer = setTimeout(() => {
+      setIndex((current) => (current + 1) % instructions.length)
+      setVisible(true)
+    }, INSTRUCTION_FADE_MS)
+    return () => clearTimeout(fadeTimer)
+  }, [visible, instructions.length])
+
+  const step = instructions[index]
+
+  return (
+    <div className="cook-instructions">
+      <div className={`cook-instruction-card${visible ? ' is-visible' : ''}`}>
+        <div className="cook-instruction-label">
+          {step.icon && <span>{step.icon}</span>}
+          <span>{step.label}</span>
+        </div>
+        <p className="cook-instruction-text">
+          {step.text.map((part, i) =>
+            typeof part === 'string' ? (
+              part
+            ) : (
+              <span className="cook-instruction-highlight" key={i}>
+                {part.highlight}
+              </span>
+            )
+          )}
+        </p>
+        {step.meta && (
+          <div className="cook-instruction-meta">
+            <ClockIcon />
+            <span>{step.meta}</span>
+          </div>
+        )}
+      </div>
+    </div>
+  )
+}
+
+function ClockIcon() {
+  return (
+    <svg className="cook-instruction-clock" viewBox="0 0 16 16" width="14" height="14" fill="none" aria-hidden="true">
+      <circle cx="8" cy="8" r="6.25" stroke="currentColor" strokeWidth="1.3" />
+      <path d="M8 4.75V8L10.2 9.4" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  )
+}
+
+function WorkCard({ id, image, title, description, role, team, reveal, cookingInstructions }) {
   return (
     <article className="work-card" data-project={id}>
       <div className="work-card-media">
-        <img className="work-card-image" src={image} alt="" />
+        <div className="work-card-image-wrap">
+          <img className="work-card-image" src={image} alt="" />
+          {cookingInstructions && <CookingInstructions instructions={cookingInstructions} />}
+        </div>
         <div className="work-card-heading">
           <h2 className="work-card-title">{title}</h2>
           <p className="work-card-description">{description}</p>

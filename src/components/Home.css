@@ -141,12 +141,91 @@
   gap: var(--space-3);
 }
 
+.work-card-image-wrap {
+  position: relative;
+}
+
 .work-card-image {
   width: 100%;
   aspect-ratio: 462 / 245;
   object-fit: cover;
   border-radius: var(--radius-image);
   display: block;
+}
+
+/* CookPilot's AR-glasses instruction overlay (482:2478): cycles through
+   the three step cards, each sliding in from the left and holding for
+   INSTRUCTION_DISPLAY_MS before the next replaces it. React re-keys the
+   card on every step change so the slide-in animation replays each time. */
+.cook-instructions {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  width: 74%;
+  pointer-events: none;
+}
+
+.cook-instruction-card {
+  background: rgba(15, 15, 15, 0.88);
+  border-radius: 12px;
+  padding: 10px 14px;
+  color: var(--color-white);
+  opacity: 0;
+  transition: opacity 700ms ease-in-out;
+  animation: cook-instruction-float 3.2s ease-in-out infinite;
+}
+
+.cook-instruction-card.is-visible {
+  opacity: 1;
+}
+
+.cook-instruction-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-body);
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 6px;
+}
+
+.cook-instruction-text {
+  margin: 0;
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 15px;
+  line-height: 1.3;
+}
+
+.cook-instruction-highlight {
+  color: #ff7a45;
+}
+
+.cook-instruction-meta {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 8px;
+  font-family: var(--font-body);
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.cook-instruction-clock {
+  flex-shrink: 0;
+}
+
+@keyframes cook-instruction-float {
+  0%,
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  25% {
+    transform: translateY(-3px) rotate(-1.5deg);
+  }
+  75% {
+    transform: translateY(3px) rotate(1.5deg);
+  }
 }
 
 .work-card-heading {
