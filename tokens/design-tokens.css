@@ -118,9 +118,10 @@
   /* HOME work-card (471:1204): outer padding is 20px - not on the base
      scale above (nearest was 16px, which earlier versions of this file
      used incorrectly). Top-level gap between [image+heading], the
-     divider rule, and the meta block is 40px (space-6). */
+     divider rule, and the meta block was 40px (space-6), tightened to
+     20px as of the latest edit - also off the base scale. */
   --space-work-card-padding: 20px;
-  --space-work-card-gap: var(--space-6);
+  --space-work-card-gap: 20px;
 
   /* HOME sidebar (471:1204): contact block is pinned to the bottom of
      the sidebar again (justify-content: space-between in Home.css) -

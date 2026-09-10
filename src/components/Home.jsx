@@ -2,6 +2,10 @@ import { useEffect, useState } from 'react'
 import bioscentImg from '../assets/work-cards/bioscent.jpg'
 import cookpilotImg from '../assets/work-cards/cookpilot.jpg'
 import visualeyesImg from '../assets/work-cards/visualeyes.jpg'
+import visualeyesFrameMeeting from '../assets/work-cards/visualeyes-frame-meeting.png'
+import visualeyesFramePresentation from '../assets/work-cards/visualeyes-frame-presentation.png'
+import visualeyesFrameGallery from '../assets/work-cards/visualeyes-frame-gallery.png'
+import visualeyesFrameVideoCall from '../assets/work-cards/visualeyes-frame-video-call.png'
 import './Home.css'
 
 const INSTRUCTION_HOLD_MS = 4800
@@ -22,6 +26,7 @@ const works = [
         'Tencent Future CloseUp ’26 | 3rd Place',
       ],
     },
+    detectionPoint: { left: 77.34, top: 59.39 },
   },
   {
     id: 'cookpilot',
@@ -64,6 +69,12 @@ const works = [
       label: 'Program:',
       lines: ['Apple Foundation Program @ UTS ’26'],
     },
+    skyFrames: [
+      { src: visualeyesFrameMeeting, left: 32.44, top: 14.78, width: 12.45 },
+      { src: visualeyesFramePresentation, left: 57.48, top: 8.11, width: 7.57 },
+      { src: visualeyesFrameGallery, left: 55.51, top: 31.08, width: 10.75 },
+      { src: visualeyesFrameVideoCall, left: 36.92, top: 47.8, width: 6.81 },
+    ],
   },
 ]
 
@@ -118,20 +129,48 @@ function CookingInstructions({ instructions }) {
 
 function ClockIcon() {
   return (
-    <svg className="cook-instruction-clock" viewBox="0 0 16 16" width="14" height="14" fill="none" aria-hidden="true">
+    <svg className="cook-instruction-clock" viewBox="0 0 16 16" fill="none" aria-hidden="true">
       <circle cx="8" cy="8" r="6.25" stroke="currentColor" strokeWidth="1.3" />
       <path d="M8 4.75V8L10.2 9.4" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   )
 }
 
-function WorkCard({ id, image, title, description, role, team, reveal, cookingInstructions }) {
+function SkyFrames({ frames }) {
+  return (
+    <div className="sky-frames">
+      {frames.map((frame) => (
+        <img
+          key={frame.src}
+          className="sky-frame"
+          src={frame.src}
+          alt=""
+          style={{ left: `${frame.left}%`, top: `${frame.top}%`, width: `${frame.width}%` }}
+        />
+      ))}
+    </div>
+  )
+}
+
+function DeviceDetector({ point }) {
+  return (
+    <div className="bioscent-detect" style={{ left: `${point.left}%`, top: `${point.top}%` }}>
+      <span className="bioscent-detect-ring" />
+      <span className="bioscent-detect-ring" />
+      <span className="bioscent-detect-core" />
+    </div>
+  )
+}
+
+function WorkCard({ id, image, title, description, role, team, reveal, cookingInstructions, skyFrames, detectionPoint }) {
   return (
     <article className="work-card" data-project={id}>
       <div className="work-card-media">
         <div className="work-card-image-wrap">
           <img className="work-card-image" src={image} alt="" />
           {cookingInstructions && <CookingInstructions instructions={cookingInstructions} />}
+          {skyFrames && <SkyFrames frames={skyFrames} />}
+          {detectionPoint && <DeviceDetector point={detectionPoint} />}
         </div>
         <div className="work-card-heading">
           <h2 className="work-card-title">{title}</h2>
@@ -169,10 +208,10 @@ export default function Home() {
               Chong
             </h1>
             <p className="bio">
-              Designer at heart, studying CS @ UTS.
+              Designer at heart, currently studying Computer Science @ UTS.
               <br />
               <br />
-              I love building thoughtful products that feel good to use and solve something real.
+              I&rsquo;m passionate about building thoughtful products that solve actual problems, and I&rsquo;m exploring where design, engineering and AI come together.
             </p>
           </div>
           <hr className="sidebar-divider" />

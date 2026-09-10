@@ -66,7 +66,7 @@
     "8": 160,
     "cardPadding": { "top": 35, "right": 33, "bottom": 26, "left": 30 },
     "tagPadding": { "x": 40, "y": 12 },
-    "workCard": { "padding": 20, "gap": 40, "note": "HOME work-card (471:1204); padding is off the base scale" },
+    "workCard": { "padding": 20, "gap": 20, "note": "HOME work-card (471:1204); both padding and gap are off the base scale. Gap was 40, tightened to 20 as of the latest edit" },
     "sidebar": { "outerGap": 80, "innerGap": 40, "introGap": 40, "note": "HOME sidebar (471:1204): outerGap separates [intro+divider+nav] from the contact block; innerGap is between intro/divider/nav; introGap is name-to-bio (briefly 48, back to the base scale 40 as of the latest edit). Contact block has no separate heading gap - it's plain stacked body text." }
   },
   "radii": {
