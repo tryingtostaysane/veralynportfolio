@@ -13,11 +13,19 @@
 
 :root {
   /* ---------- Color: neutrals (shared) ---------- */
-  --color-grey-bg: #f5f5f5;
-  --color-sidebar-bg: rgba(245, 245, 245, 0.7); /* HOME page (471:1204) sidebar fill */
+  --color-grey-bg: #f5f5f5; /* Figma variable renamed "Dark grey" as of the latest HOME edit; value unchanged */
+  --color-sidebar-bg: rgba(245, 245, 245, 0.7); /* pre-redesign HOME (471:1204) sidebar fill; superseded by --color-main-beige on the sidebar itself, kept here in case other surfaces still reference it */
   --color-grey-04: #5d5d5d;
   --color-black: #000000;
   --color-white: #ffffff;
+
+  /* ---------- Color: HOME page-level (471:1204), added in the latest edit ---------- */
+  --color-main-beige: #f5f0e5;  /* new sidebar fill */
+  --color-main-gold: #9d8248;   /* new footer fill; also the location-pin icon fill */
+  --color-main-yellow: #877650; /* was the LinkedIn/email glyph fill; as of the latest HOME edit LinkedIn is a plain white badge icon and the email glyph moved to --color-main-gold - not currently used anywhere, kept tracked in case it resurfaces */
+  --color-text-muted: rgba(0, 0, 0, 0.7);   /* new default copy color across the redesigned sidebar (name, role, bio, nav, contact) */
+  --color-divider-muted: rgba(0, 0, 0, 0.5); /* new sidebar divider color, was solid black */
+  --color-nav-pill-bg: #e1d6be; /* raw fill on the HOME nav-links container, not bound to a named Figma variable */
 
   /* ---------- Color: BioScent ---------- */
   --color-bioscent-green: #73804a;
@@ -52,12 +60,14 @@
   /* Per-level heading weight: these track live edits to the shared Figma
      text styles and have flipped more than once - always re-check
      get_variable_defs before trusting this table.
-     Current: Display XL & H3 = Regular (400); H1 & H2 = Medium (500);
-     H4 = Regular (400), confirmed via HOME nav links (471:1204). */
+     Current: Display XL = Regular (400); H1, H2 & H3 = Medium (500);
+     H4 = Regular (400). Work-card-title moved from H3 to H4 as of the
+     latest edit - confirm which nodes use which level before trusting
+     this table further. */
   --font-weight-display-xl: 400;
   --font-weight-h1: 500;
   --font-weight-h2: 500;
-  --font-weight-h3: 400;
+  --font-weight-h3: 500;
   --font-weight-h4: 400;
 
   /* Display / Headers (shared across BioScent, VisualEyes, CookPilot) */
@@ -70,10 +80,10 @@
   --text-h2-size: 48px;
   --text-h2-line-height: 1.2;
 
-  --text-h3-size: 32px;
+  --text-h3-size: 40px; /* "HEADER/H3" - used by the sidebar name only as of the latest work-card edit (card titles moved to H4 below, which now holds H3's old 32px/Regular values) */
   --text-h3-line-height: 1.2;
 
-  --text-h4-size: 24px;
+  --text-h4-size: 32px; /* was 24px; "HEADER/H4" now carries the values H3 used to have (32/Regular) - work-card-title moved onto this style as of the latest edit, separating it from the sidebar name (still H3, 40/Medium) */
   --text-h4-line-height: 1.2;
 
   /* Body (shared) */
@@ -83,16 +93,36 @@
   --text-body-md-size: 20px;
   --text-body-md-line-height: 1.2;
 
-  /* Case-study-specific text styles (VisualEyes / CookPilot) */
+  /* "PARA/Body" (471:1204 HOME): TikTok Sans 16px, used for the sidebar's
+     location/role/bio/nav/contact copy and the work-card meta/description
+     text. This style's own family was switched from Source Sans 3 to
+     TikTok Sans, and its letter-spacing removed to 0, as of the latest
+     HOME edit - it is NOT the same token as --text-body-alt-* below. Its
+     reported "lineHeight: 100" from Figma's variable API is that engine's
+     way of encoding "Auto", not a literal 1.0 multiplier - the correct
+     CSS is `normal` (confirmed by every instance of this style exporting
+     as `leading-[normal]`, never `leading-[1]`). */
+  --text-body-sm-size: 16px;
+  --text-body-sm-line-height: normal;
+
+  /* Case-study-specific text styles (VisualEyes / CookPilot) - Source
+     Sans 3. No longer used on the redesigned HOME page (see
+     --text-body-sm-* above), kept for whenever those case-study pages
+     are built. */
   --text-body-alt-size: 16px;        /* "Body" (Source Sans 3) */
   --text-body-alt-line-height: 1;
+  --text-body-alt-letter-spacing: -0.32px;
 
   --text-body-alt-2-size: 20px;      /* "Body 2" (Source Sans 3) */
   --text-body-alt-2-line-height: 1;
 
   --text-subheader-size: 20px;       /* "Subheader" (PT Serif) */
-  --text-subheader-line-height: 1;
+  --text-subheader-line-height: normal; /* was 1 - same "lineHeight: 100 means Auto" correction as --text-body-sm-line-height above */
   --text-subheader-letter-spacing: -3px; /* as reported by Figma; verify in-file, unusually tight */
+  /* Not currently used anywhere on HOME as of the latest footer edit -
+     the footer nav switched from this PT Serif style to --text-body-sm-*
+     (TikTok Sans) instead. Kept for whenever a case study using it is
+     built. */
 
   /* ---------- Spacing ---------- */
   /* Recurring gap/padding values observed across Cards, Buttons, and tag/pill components */
@@ -123,15 +153,13 @@
   --space-work-card-padding: 20px;
   --space-work-card-gap: 20px;
 
-  /* HOME sidebar (471:1204): contact block is pinned to the bottom of
-     the sidebar again (justify-content: space-between in Home.css) -
-     this value is now the MINIMUM gap between [intro+divider+nav] and
-     the contact block, not a fixed gap; inner gap is between intro /
-     divider / nav within that group; intro gap (name-to-bio) is back
-     on the base scale (40px) as of a previous edit - it briefly went
-     to 48px. Contact block is plain stacked body text (no separate
-     heading treatment or gap of its own). */
-  --space-sidebar-outer-gap: var(--space-7);
+  /* HOME sidebar (471:1204): Figma stacks [intro, divider, nav, contact]
+     as one flat flex column with a single uniform 40px gap throughout -
+     there is no separate "outer" gap pushing contact to the bottom of
+     the viewport (an earlier build here artificially stretched the
+     sidebar to 100vh height for that effect; removed - the sidebar now
+     hugs its own content, matching Figma). intro-gap is name-to-bio,
+     also 40px. */
   --space-sidebar-inner-gap: var(--space-6);
   --space-sidebar-intro-gap: var(--space-6);
 

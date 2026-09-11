@@ -22,6 +22,32 @@ body {
   text-rendering: optimizeLegibility;
 }
 
+/* The morphing custom cursor (CustomCursor.jsx) replaces the system
+   pointer on mouse/trackpad devices only - (pointer: fine) leaves touch
+   devices completely untouched, where the component itself also
+   declines to render. Body copy and form fields opt back into the real
+   system cursor (see CustomCursor.jsx's TEXT_SELECTOR) so selecting text
+   still gets a normal I-beam instead of the decorative dot. */
+@media (pointer: fine) {
+  html,
+  body,
+  a {
+    /* Browsers apply their own `cursor: pointer` to links regardless of
+       the inherited value above, which is specific enough to beat plain
+       inheritance from html/body - so anchors need the override spelled
+       out here too, or hovering a link shows both the system hand and
+       our dot/pill at once. */
+    cursor: none;
+  }
+
+  .bio,
+  input,
+  textarea,
+  [contenteditable] {
+    cursor: text;
+  }
+}
+
 #root {
   min-height: 100vh;
 }

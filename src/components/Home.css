@@ -7,21 +7,19 @@
 
 /* ---------- Sidebar ---------- */
 
+/* Figma (471:1204) stacks [intro, divider, nav] as one flat flex column
+   with a uniform 40px gap throughout - not two groups pushed apart to
+   fill the viewport. "Let's chat!" lives inside the nav pill as its
+   4th row, not as a separate contact block. The sidebar hugs its own
+   content; it does not stretch to fill tall screens. */
 .sidebar {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  gap: var(--space-sidebar-outer-gap);
-  background: var(--color-sidebar-bg);
-  border-radius: var(--radius-xs);
-  color: var(--color-black);
-  padding: var(--space-5) var(--space-4);
-}
-
-.sidebar-top {
-  display: flex;
-  flex-direction: column;
   gap: var(--space-sidebar-inner-gap);
+  background: var(--color-main-beige);
+  border-radius: var(--radius-xs);
+  color: var(--color-text-muted);
+  padding: var(--space-5) var(--space-4);
 }
 
 .intro {
@@ -30,19 +28,26 @@
   gap: var(--space-sidebar-intro-gap);
 }
 
+.intro-heading,
+.role-bio {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
 .sidebar-divider {
   width: 100%;
   height: 1px;
   border: none;
   margin: 0;
-  background: var(--color-black);
+  background: var(--color-divider-muted);
 }
 
 /* Pin the variable font's optical-size axis to match Figma's "36pt" cut
    (see --font-variation-heading in tokens) instead of the browser's default. */
 .name,
-.nav-links a,
-.work-card-title {
+.work-card-title,
+.site-footer-name {
   font-optical-sizing: var(--font-optical-sizing-heading);
   font-variation-settings: var(--font-variation-heading);
 }
@@ -53,47 +58,205 @@
   font-weight: var(--font-weight-h3);
   font-size: var(--text-h3-size);
   line-height: var(--text-h3-line-height);
+  color: var(--color-text-muted);
+}
+
+.location {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: var(--text-body-sm-size);
+  line-height: var(--text-body-sm-line-height);
+  text-transform: uppercase;
+}
+
+.location-icon {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+.role {
+  margin: 0;
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: var(--text-body-sm-size);
+  line-height: var(--text-body-sm-line-height);
+  text-transform: uppercase;
+  /* Preserves the literal repeated spaces around "|" (matching Figma's
+     own whitespace-pre-wrap technique) while still wrapping normally -
+     unlike &nbsp;&nbsp;, a wrap point doesn't strand spaces at the start
+     of the next line as visible indentation. */
+  white-space: pre-wrap;
 }
 
 .bio {
   margin: 0;
   font-family: var(--font-body);
   font-weight: var(--font-weight-body);
-  font-size: var(--text-body-md-size);
-  line-height: var(--text-body-md-line-height);
+  font-size: var(--text-body-sm-size);
+  line-height: var(--text-body-sm-line-height);
 }
 
 .nav-links {
   display: flex;
   flex-direction: column;
-  gap: var(--space-1);
+  background: var(--color-nav-pill-bg);
+  border-radius: var(--radius-card);
+  padding: var(--space-3) 0; /* outer 16px vertical padding wrapping all rows, added as of the latest menu edit */
+  overflow: hidden;
+  animation: nav-pill-float 4s ease-in-out infinite;
 }
 
-.nav-links a {
-  display: block;
+@keyframes nav-pill-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-4px);
+  }
+}
+
+.nav-links a,
+.nav-link-pending {
+  display: flex;
+  align-items: center;
+  padding: var(--space-2) var(--space-work-card-padding); /* was --space-3 (16px) vertical; tightened to --space-2 (12px) now that the pill itself carries its own vertical padding */
   color: inherit;
   text-decoration: none;
-  font-family: var(--font-heading);
-  font-weight: var(--font-weight-h4);
-  font-size: var(--text-h4-size);
-  line-height: var(--text-h4-line-height);
+  font-family: var(--font-body);
+  font-weight: 700; /* was regular; nav items are bold as of the latest menu edit */
+  font-size: var(--text-body-sm-size);
+  line-height: var(--text-body-sm-line-height);
 }
 
-.nav-links a:hover {
+/* Underline draws in left-to-right on hover instead of appearing all at
+   once (a plain text-decoration:underline has no way to animate its
+   reveal direction, hence the pseudo-element + scaleX approach). */
+.nav-link-text {
+  position: relative;
+}
+
+.nav-link-text::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -3px;
+  width: 100%;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 300ms ease-out;
+}
+
+.nav-links a:hover .nav-link-text::after {
+  transform: scaleX(1);
+}
+
+.nav-link-pending {
+  cursor: default;
+}
+
+/* ---------- Footer ---------- */
+
+.site-footer {
+  display: flex;
+  flex-direction: column;
+  gap: 20px; /* was --space-6 (40px); off the base scale, matches --space-work-card-padding's 20 coincidentally */
+  background: var(--color-main-gold);
+  padding: var(--space-6) var(--space-7);
+}
+
+.site-footer-top {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-3);
+}
+
+.site-footer-socials {
+  display: flex;
+  gap: 5.6px; /* was --space-1 (8px); icons scaled to 70% of their prior size, gap scaled with them */
+}
+
+.social-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 33.6px;
+  height: 33.6px;
+  background: var(--color-white);
+  border-radius: 4px;
+  color: inherit;
+}
+
+.social-icon-glyph {
+  width: 16.8px;
+  height: auto;
+}
+
+/* LinkedIn (471:1204, latest edit): the icon is now a self-contained
+   white badge (its own rounded-square silhouette is baked into the
+   SVG), not a colored glyph that needs an external white box like
+   email still does. */
+.social-icon-plain {
+  display: flex;
+  width: 33.6px;
+  height: 33.6px;
+  color: inherit;
+}
+
+.social-icon-plain svg {
+  width: 100%;
+  height: 100%;
+}
+
+.site-footer-name {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-weight: var(--font-weight-h3);
+  font-size: var(--text-h3-size);
+  line-height: var(--text-h3-line-height);
+  color: var(--color-white);
+}
+
+.site-footer-nav {
+  display: flex;
+  gap: var(--space-6);
+}
+
+.site-footer-nav a,
+.site-footer-nav .nav-link-pending {
+  padding: 0;
+  color: var(--color-white);
+  text-decoration: none;
+  font-family: var(--font-body);
+  font-size: var(--text-body-sm-size);
+  line-height: var(--text-body-sm-line-height);
+  text-transform: none;
+}
+
+.site-footer-nav a:hover {
   text-decoration: underline;
 }
 
-.contact {
-  display: flex;
-  flex-direction: column;
-  font-family: var(--font-body);
-  font-weight: var(--font-weight-body);
-  font-size: var(--text-body-md-size);
-  line-height: var(--text-body-md-line-height);
+.site-footer-divider {
+  width: 100%;
+  height: 0;
+  margin: 0;
+  border: none;
+  border-top: 0.5px solid var(--color-white);
 }
 
-.contact p {
+.site-footer-copyright {
   margin: 0;
+  font-family: var(--font-body);
+  font-size: var(--text-body-sm-size);
+  color: var(--color-white);
 }
 
 /* ---------- Work grid ---------- */
@@ -336,12 +499,14 @@
   gap: var(--space-3);
 }
 
+/* H4 (32px, Regular) - stays the same size in both default and hover
+   states; only the awards/program panel below it appears on hover. */
 .work-card-title {
   margin: 0;
   font-family: var(--font-heading);
-  font-weight: var(--font-weight-h3);
-  font-size: var(--text-h3-size);
-  line-height: var(--text-h3-line-height);
+  font-weight: var(--font-weight-h4);
+  font-size: var(--text-h4-size);
+  line-height: var(--text-h4-line-height);
   color: var(--color-black);
 }
 
@@ -349,8 +514,8 @@
   margin: 0;
   font-family: var(--font-body);
   font-weight: var(--font-weight-body);
-  font-size: var(--text-body-md-size);
-  line-height: var(--text-body-md-line-height);
+  font-size: var(--text-body-sm-size);
+  line-height: var(--text-body-sm-line-height);
   color: var(--color-black);
 }
 
@@ -367,8 +532,8 @@
   flex-direction: column;
   font-family: var(--font-body);
   font-weight: var(--font-weight-body);
-  font-size: var(--text-body-md-size);
-  line-height: var(--text-body-md-line-height);
+  font-size: var(--text-body-sm-size);
+  line-height: var(--text-body-sm-line-height);
   color: var(--color-black);
 }
 
@@ -399,9 +564,13 @@
 .work-card-reveal-inner {
   font-family: var(--font-body);
   font-weight: var(--font-weight-body);
-  font-size: var(--text-body-md-size);
-  line-height: var(--text-body-md-line-height);
+  font-size: var(--text-body-sm-size);
+  line-height: var(--text-body-sm-line-height);
   color: var(--color-black);
+}
+
+.work-card-reveal-inner p:first-child {
+  font-weight: 700;
 }
 
 .work-card-reveal-inner p {
@@ -413,12 +582,6 @@
 @media (min-width: 640px) {
   .sidebar {
     padding: var(--space-6) var(--space-5);
-  }
-
-  .name {
-    font-weight: var(--font-weight-h2);
-    font-size: var(--text-h2-size);
-    line-height: var(--text-h2-line-height);
   }
 
   .work-grid {
@@ -436,34 +599,25 @@
     gap: var(--space-4);
   }
 
-  .work-card-title {
-    font-weight: var(--font-weight-h2);
-    font-size: var(--text-h2-size);
-    line-height: var(--text-h2-line-height);
-  }
 }
 
 /* ---------- Desktop (1025px+) ---------- */
 
 @media (min-width: 1025px) {
+  /* stretch (not flex-start): the beige sidebar fill should always reach
+     as far down as the taller of [sidebar content, card column] - i.e.
+     all the way to the footer - not stop short at its own content height. */
   .home {
     flex-direction: row;
-    align-items: flex-start;
+    align-items: stretch;
   }
 
   .sidebar {
     flex: 0 0 340px;
     width: 340px;
-    min-height: 100vh;
     position: sticky;
     top: 0;
     padding: var(--space-7) var(--space-6);
-  }
-
-  .name {
-    font-weight: var(--font-weight-h1);
-    font-size: var(--text-h1-size);
-    line-height: var(--text-h1-line-height);
   }
 
   /* No max-width here: flex:1 plus this 80px padding is what keeps the
