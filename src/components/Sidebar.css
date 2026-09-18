@@ -453,6 +453,13 @@
   .sidebar.mobile-menu-open {
     transform: translateX(0);
   }
+
+  /* 20% smaller than the desktop H3 size - the drawer is much
+     narrower than the in-flow sidebar, so the name doesn't need to
+     carry the same weight here. */
+  .name {
+    font-size: calc(var(--text-h3-size) * 0.8);
+  }
 }
 
 /* ---------- Tablet (640px - 1024px) ---------- */
