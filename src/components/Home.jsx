@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import Sidebar from './Sidebar.jsx'
 import Footer from './Footer.jsx'
@@ -72,7 +72,23 @@ const works = [
   },
 ]
 
-function WorkCard({ id, href, image, title, description, role, team, reveal, cookingInstructions, skyFrames, detectionPoint, placeholder, caption = 'View project' }) {
+function WorkCard({
+  id,
+  href,
+  image,
+  title,
+  description,
+  role,
+  team,
+  reveal,
+  cookingInstructions,
+  skyFrames,
+  detectionPoint,
+  placeholder,
+  caption = 'View project',
+  activeCardId,
+  setActiveCardId,
+}) {
   // Projects without a built case study page stay plain, unclickable
   // article cards; internal case-study links are real react-router
   // links; the "Next Case Study" card's href is a mailto: (external),
@@ -86,8 +102,35 @@ function WorkCard({ id, href, image, title, description, role, team, reveal, coo
   // just navigate normally, no fallback code needed.
   const isExternal = href?.includes(':')
   const Wrapper = href ? (isExternal ? 'a' : Link) : 'article'
+  const isActive = activeCardId === id
+
+  // Touch devices have no real hover, so the CSS `:hover` reveal (see
+  // .work-card:hover .work-card-reveal in Home.css) can't drive it there.
+  // Give touch its own explicit two-tap gesture instead: activeCardId is
+  // owned by Home (not local state) so only one card is ever open - a tap
+  // on a card that isn't the current activeCardId reveals it (and, as a
+  // side effect of them no longer matching, collapses whichever card was
+  // open before) and swallows the navigation; a tap on the already-open
+  // card goes through untouched. Desktop/mouse is unaffected - `matchMedia`
+  // there reports real hover so this bails out and the existing
+  // hover+click behavior fires as before.
+  const handleClick = (e) => {
+    if (!reveal) return
+    if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) return
+    if (!isActive) {
+      e.preventDefault()
+      setActiveCardId(id)
+    }
+  }
+
   const wrapperProps = href
-    ? { [isExternal ? 'href' : 'to']: href, ...(isExternal ? {} : { viewTransition: true }), className: 'work-card', 'data-project': id }
+    ? {
+        [isExternal ? 'href' : 'to']: href,
+        ...(isExternal ? {} : { viewTransition: true }),
+        className: `work-card${isActive ? ' is-revealed' : ''}`,
+        'data-project': id,
+        onClick: handleClick,
+      }
     : { className: 'work-card', 'data-project': id }
 
   // "* View project *" cursor-following caption - used to be drawn by the
@@ -165,18 +208,38 @@ function WorkCard({ id, href, image, title, description, role, team, reveal, coo
 }
 
 export default function Home() {
+  // The single open card on touch, lifted here (not per-card local state)
+  // so opening one card can collapse whichever other one was open - see
+  // the two-tap gesture in WorkCard and .work-card.is-revealed in
+  // Home.css. Only ever set from a coarse-pointer tap (WorkCard's
+  // matchMedia guard), so this has no effect on desktop.
+  const [activeCardId, setActiveCardId] = useState(null)
+
+  // A tap outside every card collapses whichever one is open. Only
+  // attached while a card is actually open, and activeCardId is only ever
+  // set via the touch path above, so this never runs on desktop.
+  useEffect(() => {
+    if (!activeCardId) return
+    const onPointerDown = (e) => {
+      if (e.target.closest('[data-project]')) return
+      setActiveCardId(null)
+    }
+    document.addEventListener('pointerdown', onPointerDown)
+    return () => document.removeEventListener('pointerdown', onPointerDown)
+  }, [activeCardId])
+
   return (
     <>
       <div className="home">
         <Sidebar />
         <main className="work-grid" id="work">
           <div className="work-column">
-            <WorkCard {...works[0]} />
-            <WorkCard {...works[2]} />
+            <WorkCard {...works[0]} activeCardId={activeCardId} setActiveCardId={setActiveCardId} />
+            <WorkCard {...works[2]} activeCardId={activeCardId} setActiveCardId={setActiveCardId} />
           </div>
           <div className="work-column">
-            <WorkCard {...works[1]} />
-            <WorkCard {...works[3]} />
+            <WorkCard {...works[1]} activeCardId={activeCardId} setActiveCardId={setActiveCardId} />
+            <WorkCard {...works[3]} activeCardId={activeCardId} setActiveCardId={setActiveCardId} />
           </div>
         </main>
       </div>

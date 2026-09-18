@@ -218,7 +218,23 @@
   transition: max-height 500ms ease-out, margin-top 500ms ease-out;
 }
 
-.work-card:hover .work-card-reveal {
+/* Scoped to real-hover pointers (mouse/trackpad) only: on touch devices
+   `:hover` fires on the first tap and only navigates on the second, so a
+   plain `.work-card:hover` rule here would force every mobile tap into
+   that reveal-then-navigate two-step. Touch users just get a single tap
+   straight through to the project instead. */
+@media (hover: hover) and (pointer: fine) {
+  .work-card:hover .work-card-reveal {
+    max-height: 200px;
+    margin-top: 0;
+  }
+}
+
+/* Touch equivalent of the hover reveal above: on a device with no real
+   hover, WorkCard (Home.jsx) intercepts the first tap to add this class
+   instead of navigating, so tapping reveals the awards/program text; a
+   second tap (class already applied) goes through and navigates. */
+.work-card.is-revealed .work-card-reveal {
   max-height: 200px;
   margin-top: 0;
 }
