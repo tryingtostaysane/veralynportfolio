@@ -565,7 +565,7 @@
   flex-direction: column;
   justify-content: center;
   width: 100%;
-  height: 160px;
+  min-height: 160px;
   background: var(--color-bioscent-green);
   border-radius: var(--radius-card);
   padding: var(--space-6);
