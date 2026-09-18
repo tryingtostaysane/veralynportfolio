@@ -806,6 +806,56 @@
   object-fit: contain;
 }
 
+/* Below desktop, the row's cqw sizing shrinks past legible (its
+   825px-basis description text is already only ~9px there) - instead
+   of continuing to shrink with the viewport, it becomes a fixed-size
+   2-column grid so text/icons hold a comfortable minimum size
+   regardless of width. Connector arrows are dropped since they're a
+   horizontal-flow cue that doesn't read cleanly once cards wrap into a
+   grid; each track's own heading still groups its 5 steps. */
+@media (max-width: 1024px) {
+  .user-journey-track-row {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-2);
+  }
+
+  .user-journey-connector {
+    display: none;
+  }
+
+  .user-journey-card {
+    width: 100%;
+    gap: var(--space-2);
+    padding: var(--space-2);
+    border-radius: 12px;
+  }
+
+  .user-journey-card-text {
+    gap: 6px;
+  }
+
+  .user-journey-card-number {
+    width: 24px;
+    height: 24px;
+    font-size: 12px;
+  }
+
+  .user-journey-card-title {
+    font-size: 14px;
+    letter-spacing: normal;
+  }
+
+  .user-journey-card-description {
+    font-size: 12px;
+  }
+
+  .user-journey-card-icon-slot {
+    width: 56px;
+    height: 42px;
+  }
+}
+
 /* "Solution" (Figma node 524:2936): tag+heading intro (gap-8, tighter
    than the usual gap-16 - see .case-study-solution .case-study-section-
    intro override below), then the feature list + phone mockup, gap-16
