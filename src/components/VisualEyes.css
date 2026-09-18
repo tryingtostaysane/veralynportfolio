@@ -694,9 +694,8 @@
   width: 100%;
 }
 
-/* Shared by "Spatial & Multimodal Experiment" and the 3 sub-headings
-   below it ("Navigating 3D Space...", "World generation...", "Input
-   type...") - all 4 use this same 40px/Medium H3 style in Figma. */
+/* "World generation..." and "Input type..." sub-headings - still the
+   40px/Medium H3 style in Figma. */
 .case-study-visualeyes-experiment-heading {
   margin: 0;
   width: 100%;
@@ -704,6 +703,23 @@
   font-weight: var(--font-weight-h3);
   font-size: var(--text-h3-size);
   line-height: var(--text-h3-line-height);
+  color: var(--color-black);
+  font-optical-sizing: var(--font-optical-sizing-heading);
+  font-variation-settings: var(--font-variation-heading);
+}
+
+/* "Spatial & Multimodal Experiment" (the section intro heading) and
+   "Navigating 3D Space..." were resized down to the 28px/Regular H5
+   style in the latest Figma edit - same combo as
+   .case-study-section-heading, kept as its own class since it still
+   needs the width:100% these headings sit at. */
+.case-study-visualeyes-experiment-heading-sm {
+  margin: 0;
+  width: 100%;
+  font-family: var(--font-heading);
+  font-weight: var(--font-weight-h5);
+  font-size: var(--text-h5-size);
+  line-height: var(--text-h5-line-height);
   color: var(--color-black);
   font-optical-sizing: var(--font-optical-sizing-heading);
   font-variation-settings: var(--font-variation-heading);

@@ -114,6 +114,15 @@
   margin: 0;
 }
 
+/* Label line ("Team :", "Skills :", "Awards :"/"Award :", "Tools :") is
+   Bold in Figma on BioScent and CookPilot (nodes 432:22571/22576/22573,
+   614:1076/1077/1078/619:4), same 16px size as the rest of the block -
+   VisualEyes keeps its labels Regular (nodes 573:2906/2907/2908), so
+   excluded here. */
+.case-study-meta:not(.case-study-meta-visualeyes) .case-study-meta-block p:first-child {
+  font-weight: 700;
+}
+
 /* Fixed 304px per Figma (node 432:22576) - forces "Vibe Coding" onto
    its own line, same as the design. */
 .case-study-meta-block-skills {

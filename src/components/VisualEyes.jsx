@@ -575,7 +575,7 @@ export default function VisualEyes() {
             <div className="case-study-visualeyes-3dworld-intro">
               <span className="case-study-tag case-study-tag-visualeyes">3D WORLD EXPERIMENTATION</span>
               <div className="case-study-visualeyes-heading-group">
-                <h2 id="3dworld-title" className="case-study-visualeyes-experiment-heading">
+                <h2 id="3dworld-title" className="case-study-visualeyes-experiment-heading-sm">
                   Spatial &amp; Multimodal Experiment
                 </h2>
                 <p className="case-study-section-description">
@@ -589,7 +589,7 @@ export default function VisualEyes() {
               </ul>
             </div>
             <div className="case-study-visualeyes-3dworld-group">
-              <h3 className="case-study-visualeyes-experiment-heading">Navigating 3D Space (Keyboard vs console)</h3>
+              <h3 className="case-study-visualeyes-experiment-heading-sm">Navigating 3D Space (Keyboard vs console)</h3>
               <div className="case-study-visualeyes-3dworld-method">
                 <div className="case-study-visualeyes-3dworld-method-header">
                   <h4 className="case-study-section-heading">{'Method 1: Keyboard (← → ↑ ↓ )'}</h4>
