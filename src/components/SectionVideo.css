@@ -6,6 +6,10 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+  /* Mobile Safari doesn't always clip a <video>'s square corners to a
+     wrapping frame's overflow:hidden + border-radius - giving the video
+     its own radius (inherited from the frame) clips reliably regardless. */
+  border-radius: inherit;
 }
 
 /* Default click-to-toggle-sound control, reused everywhere a caller

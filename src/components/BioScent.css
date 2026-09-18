@@ -982,6 +982,11 @@
   padding: 14px;
   box-sizing: border-box;
   box-shadow: 0 20px 40px -20px rgba(50, 50, 36, 0.4);
+  /* Backstop for the .solution-phone-screen clip below - mobile Safari
+     doesn't always honor a wrapping div's overflow:hidden against a
+     <video>'s square corners, so the outer bezel needs its own clip too
+     or the video's corners can poke out past the rounded frame. */
+  overflow: hidden;
 }
 
 /* Percentage width with a px cap (not a fixed px size) so the island
@@ -1017,6 +1022,10 @@
   height: 100%;
   object-fit: cover;
   background: var(--color-black);
+  /* The known fix for the mobile Safari clipping bug above: giving the
+     video its own radius (matching its direct parent's) clips reliably
+     even when the parent's overflow:hidden alone doesn't. */
+  border-radius: inherit;
 }
 
 /* "Limitation" (Figma node 571:1275/571:1276): tag+heading intro then
