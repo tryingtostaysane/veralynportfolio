@@ -358,6 +358,103 @@
   height: 20px;
 }
 
+/* ---------- Mobile menu (hamburger + slide-out drawer) ---------- */
+
+/* Hidden by default (desktop shows the sidebar in-flow, nothing to
+   toggle); the max-width query below switches it on. Fixed rather than
+   living inside .sidebar itself so it stays reachable even while the
+   drawer is closed and .sidebar is off-screen. */
+.mobile-menu-toggle {
+  display: none;
+  position: fixed;
+  top: var(--space-4);
+  right: var(--space-4);
+  z-index: 110;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 5px;
+  width: 48px;
+  height: 48px;
+  border: none;
+  border-radius: var(--radius-full);
+  background: var(--color-main-gold);
+  cursor: pointer;
+  transition: filter 150ms ease-out;
+}
+
+.mobile-menu-toggle:hover {
+  filter: brightness(1.12);
+}
+
+.mobile-menu-toggle-bar {
+  width: 20px;
+  height: 2px;
+  border-radius: var(--radius-full);
+  background: var(--color-white);
+  transition: transform 250ms ease-out, opacity 150ms ease-out;
+}
+
+/* Bars converge into an X - middle bar fades out, the other two rotate
+   and slide to meet in the middle (7px = half the bar+gap stack). */
+.mobile-menu-toggle.is-open .mobile-menu-toggle-bar:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+
+.mobile-menu-toggle.is-open .mobile-menu-toggle-bar:nth-child(2) {
+  opacity: 0;
+}
+
+.mobile-menu-toggle.is-open .mobile-menu-toggle-bar:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+.mobile-menu-backdrop {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  background: rgba(0, 0, 0, 0.4);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 250ms ease-out;
+}
+
+.mobile-menu-backdrop.is-visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* ---------- Mobile & tablet (below 1025px) ---------- */
+
+@media (max-width: 1024px) {
+  .mobile-menu-toggle,
+  .mobile-menu-backdrop {
+    display: flex;
+  }
+
+  /* The sidebar itself becomes the drawer: fixed off-screen to the
+     right, sliding into view on `.mobile-menu-open` instead of sitting
+     in-flow above the page content. */
+  .sidebar {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 100;
+    width: min(85vw, 360px);
+    border-radius: 0;
+    overflow-y: auto;
+    box-shadow: -8px 0 24px rgba(0, 0, 0, 0.15);
+    transform: translateX(100%);
+    transition: transform 300ms ease-out;
+  }
+
+  .sidebar.mobile-menu-open {
+    transform: translateX(0);
+  }
+}
+
 /* ---------- Tablet (640px - 1024px) ---------- */
 
 @media (min-width: 640px) {

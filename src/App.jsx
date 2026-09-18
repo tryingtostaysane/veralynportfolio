@@ -1,4 +1,5 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import { Analytics } from '@vercel/analytics/react'
 import Home from './components/Home.jsx'
 import BioScent from './components/BioScent.jsx'
 import CookPilot from './components/CookPilot.jsx'
@@ -20,7 +21,12 @@ const router = createBrowserRouter([
 ])
 
 function App() {
-  return <RouterProvider router={router} />
+  return (
+    <>
+      <RouterProvider router={router} />
+      <Analytics />
+    </>
+  )
 }
 
 export default App

@@ -206,13 +206,13 @@ function handleTocClick(e, href) {
   window.history.pushState(null, '', href)
 }
 
-function TableOfContents() {
+function TableOfContents({ onNavigate }) {
   const { pathname } = useLocation()
   const items = TOC_ITEMS_BY_PATH[pathname] ?? BIOSCENT_TOC_ITEMS
 
   return (
     <nav className="toc" aria-label="Table of contents">
-      <Link to="/" className="toc-back">
+      <Link to="/" className="toc-back" onClick={onNavigate}>
         &larr; Works
       </Link>
       <div className="toc-group">
@@ -220,7 +220,14 @@ function TableOfContents() {
         <ul className="toc-list">
           {items.map((item) => (
             <li key={item.href}>
-              <a href={item.href} className={`toc-item${item.muted ? ' toc-item-muted' : ''}`} onClick={(e) => handleTocClick(e, item.href)}>
+              <a
+                href={item.href}
+                className={`toc-item${item.muted ? ' toc-item-muted' : ''}`}
+                onClick={(e) => {
+                  handleTocClick(e, item.href)
+                  onNavigate?.()
+                }}
+              >
                 {item.label}
               </a>
             </li>
@@ -228,6 +235,26 @@ function TableOfContents() {
         </ul>
       </div>
     </nav>
+  )
+}
+
+// Hamburger <-> close icon, fixed top-right - only rendered visibly
+// below the desktop breakpoint (see .mobile-menu-toggle's `display: none`
+// override in Sidebar.css); at desktop the full sidebar is always on
+// screen so there's nothing for it to open.
+function MobileMenuToggle({ open, onClick }) {
+  return (
+    <button
+      type="button"
+      className={`mobile-menu-toggle${open ? ' is-open' : ''}`}
+      onClick={onClick}
+      aria-expanded={open}
+      aria-label={open ? 'Close menu' : 'Open menu'}
+    >
+      <span className="mobile-menu-toggle-bar" />
+      <span className="mobile-menu-toggle-bar" />
+      <span className="mobile-menu-toggle-bar" />
+    </button>
   )
 }
 
@@ -239,13 +266,53 @@ export default function Sidebar() {
   const { pathname } = useLocation()
   const isHome = pathname === '/'
   const homePrefix = isHome ? '' : '/'
+  const [menuOpen, setMenuOpen] = useState(false)
+  const closeMenu = () => setMenuOpen(false)
+
+  // A route change (Works/About me link) always means the drawer's job
+  // is done - same-page TOC anchors don't change pathname, so those
+  // close themselves via TableOfContents' onNavigate instead. Adjusting
+  // state during render (React's documented pattern for "reset on prop
+  // change") rather than in an effect avoids the extra commit-then-
+  // re-render pass an effect-based reset would cause.
+  const [prevPathname, setPrevPathname] = useState(pathname)
+  if (pathname !== prevPathname) {
+    setPrevPathname(pathname)
+    setMenuOpen(false)
+  }
+
+  // Body scroll lock while the drawer covers the screen - without this,
+  // the page underneath keeps scrolling behind the open menu on touch
+  // devices.
+  useEffect(() => {
+    if (!menuOpen) return
+    const { overflow } = document.body.style
+    document.body.style.overflow = 'hidden'
+    return () => {
+      document.body.style.overflow = overflow
+    }
+  }, [menuOpen])
+
+  useEffect(() => {
+    if (!menuOpen) return
+    const onKeyDown = (e) => {
+      if (e.key === 'Escape') closeMenu()
+    }
+    window.addEventListener('keydown', onKeyDown)
+    return () => window.removeEventListener('keydown', onKeyDown)
+  }, [menuOpen])
+
+  const toggle = <MobileMenuToggle open={menuOpen} onClick={() => setMenuOpen((open) => !open)} />
+  const backdrop = <div className={`mobile-menu-backdrop${menuOpen ? ' is-visible' : ''}`} onClick={closeMenu} aria-hidden="true" />
 
   if (!isHome) {
     return (
       <>
-        <aside className="sidebar sidebar-toc">
+        {toggle}
+        {backdrop}
+        <aside className={`sidebar sidebar-toc${menuOpen ? ' mobile-menu-open' : ''}`}>
           <div className="sidebar-inner">
-            <TableOfContents />
+            <TableOfContents onNavigate={closeMenu} />
           </div>
         </aside>
         {CASE_STUDY_PATHS.has(pathname) && <FloatingBackToTop />}
@@ -254,51 +321,56 @@ export default function Sidebar() {
   }
 
   return (
-    <aside className="sidebar">
-      <div className="sidebar-inner">
-        <div className="intro">
-          <div className="intro-heading">
-            <h1 className="name">Veralyn Chong</h1>
-            <p className="location">
-              <LocationMarkerIcon />
-              <span>Sydney, NSW</span>
-            </p>
-          </div>
-          <div className="role-bio">
-            <p className="role">{'Computer Science @ UTS  |   UIUX Intern @ StudioLDN'}</p>
-            <p className="bio">
-              I&rsquo;m passionate about building thoughtful products that solve actual problems, and I&rsquo;m exploring the world where design, engineering and AI come together.
-            </p>
-          </div>
-        </div>
-        <hr className="sidebar-divider" />
-        <nav className="nav-links">
-          <a href={`${homePrefix}#work`}>
-            <span className="nav-link-text">Works</span>
-          </a>
-          <Link to="/about">
-            <span className="nav-link-text">About me</span>
-          </Link>
-          <div className="nav-link-chat">
-            <span className="nav-link-text">Let&rsquo;s chat!</span>
-            <div className="nav-link-chat-options">
-              <a className="nav-link-chat-icon" href="mailto:veralynliyi@gmail.com" aria-label="Email">
-                <EmailIcon />
-              </a>
-              <a
-                className="nav-link-chat-icon"
-                href="https://www.linkedin.com/in/veralynliyi"
-                target="_blank"
-                rel="noreferrer"
-                aria-label="LinkedIn"
-              >
-                <LinkedInBadgeIcon />
-              </a>
+    <>
+      {toggle}
+      {backdrop}
+      <aside className={`sidebar${menuOpen ? ' mobile-menu-open' : ''}`}>
+        <div className="sidebar-inner">
+          <div className="intro">
+            <div className="intro-heading">
+              <h1 className="name">Veralyn Chong</h1>
+              <p className="location">
+                <LocationMarkerIcon />
+                <span>Sydney, NSW</span>
+              </p>
+            </div>
+            <div className="role-bio">
+              <p className="role">{'Computer Science @ UTS  |   UIUX Intern @ StudioLDN'}</p>
+              <p className="bio">
+                I&rsquo;m passionate about building thoughtful products that solve actual problems, and I&rsquo;m exploring the world where design, engineering and AI come together.
+              </p>
             </div>
           </div>
-          <span className="nav-link-pending">Playground *coming soon*</span>
-        </nav>
-      </div>
-    </aside>
+          <hr className="sidebar-divider" />
+          <nav className="nav-links">
+            <a href={`${homePrefix}#work`} onClick={closeMenu}>
+              <span className="nav-link-text">Works</span>
+            </a>
+            <Link to="/about" onClick={closeMenu}>
+              <span className="nav-link-text">About me</span>
+            </Link>
+            <div className="nav-link-chat">
+              <span className="nav-link-text">Let&rsquo;s chat!</span>
+              <div className="nav-link-chat-options">
+                <a className="nav-link-chat-icon" href="mailto:veralynliyi@gmail.com" aria-label="Email" onClick={closeMenu}>
+                  <EmailIcon />
+                </a>
+                <a
+                  className="nav-link-chat-icon"
+                  href="https://www.linkedin.com/in/veralynliyi"
+                  target="_blank"
+                  rel="noreferrer"
+                  aria-label="LinkedIn"
+                  onClick={closeMenu}
+                >
+                  <LinkedInBadgeIcon />
+                </a>
+              </div>
+            </div>
+            <span className="nav-link-pending">Playground *coming soon*</span>
+          </nav>
+        </div>
+      </aside>
+    </>
   )
 }

@@ -60,7 +60,6 @@ export default function Footer() {
         <nav className="site-footer-nav">
           <a href={`${homePrefix}#work`}>All projects</a>
           <Link to="/about">About me</Link>
-          <span className="nav-link-pending">Resume</span>
         </nav>
       </div>
       <hr className="site-footer-divider" />
