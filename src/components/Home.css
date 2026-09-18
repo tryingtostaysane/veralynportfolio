@@ -5,95 +5,13 @@
   background: var(--color-white);
 }
 
-/* ---------- Sidebar ---------- */
-
-.sidebar {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  gap: var(--space-sidebar-outer-gap);
-  background: var(--color-sidebar-bg);
-  border-radius: var(--radius-xs);
-  color: var(--color-black);
-  padding: var(--space-5) var(--space-4);
-}
-
-.sidebar-top {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-sidebar-inner-gap);
-}
-
-.intro {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-sidebar-intro-gap);
-}
-
-.sidebar-divider {
-  width: 100%;
-  height: 1px;
-  border: none;
-  margin: 0;
-  background: var(--color-black);
-}
-
 /* Pin the variable font's optical-size axis to match Figma's "36pt" cut
-   (see --font-variation-heading in tokens) instead of the browser's default. */
-.name,
-.nav-links a,
+   (see --font-variation-heading in tokens) instead of the browser's default.
+   Shared with .name (Sidebar.css) and .site-footer-name (Footer.css) -
+   all three use the same H3 heading style. */
 .work-card-title {
   font-optical-sizing: var(--font-optical-sizing-heading);
   font-variation-settings: var(--font-variation-heading);
-}
-
-.name {
-  margin: 0;
-  font-family: var(--font-heading);
-  font-weight: var(--font-weight-h3);
-  font-size: var(--text-h3-size);
-  line-height: var(--text-h3-line-height);
-}
-
-.bio {
-  margin: 0;
-  font-family: var(--font-body);
-  font-weight: var(--font-weight-body);
-  font-size: var(--text-body-md-size);
-  line-height: var(--text-body-md-line-height);
-}
-
-.nav-links {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-1);
-}
-
-.nav-links a {
-  display: block;
-  color: inherit;
-  text-decoration: none;
-  font-family: var(--font-heading);
-  font-weight: var(--font-weight-h4);
-  font-size: var(--text-h4-size);
-  line-height: var(--text-h4-line-height);
-}
-
-.nav-links a:hover {
-  text-decoration: underline;
-}
-
-.contact {
-  display: flex;
-  flex-direction: column;
-  font-family: var(--font-body);
-  font-weight: var(--font-weight-body);
-  font-size: var(--text-body-md-size);
-  line-height: var(--text-body-md-line-height);
-}
-
-.contact p {
-  margin: 0;
 }
 
 /* ---------- Work grid ---------- */
@@ -126,13 +44,56 @@
   order: 3;
 }
 
+.work-card[data-project='next-case-study'] {
+  order: 4;
+}
+
+/* Renders as either a plain <article> (no case study page yet) or a
+   react-router <a> (BioScent) - the reset below only matters for the
+   latter, since a plain article has no native link styling to undo. */
 .work-card {
+  position: relative;
   display: flex;
   flex-direction: column;
   gap: var(--space-work-card-gap);
   background: var(--color-grey-bg);
   border-radius: var(--radius-card);
   padding: var(--space-work-card-padding);
+  color: inherit;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/* "View Project" hover caption - this used to be drawn by the global
+   custom cursor (which morphed into a pill reading "* View Project *"
+   over any .work-card); now that the cursor is back to the system
+   default, the label lives here instead, following the mouse via
+   left/top written straight to the DOM in Home.jsx. Same fade/positioning
+   treatment as the collage captions in the case-study pages. */
+.work-card-cursor-caption {
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: 8px 14px;
+  background: rgba(23, 23, 20, 0.92);
+  border-radius: 4px;
+  color: var(--color-white);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  line-height: 1.4;
+  white-space: nowrap;
+  pointer-events: none;
+  z-index: 2;
+  opacity: 0;
+  transform: translate(16px, -120%) scale(0.96);
+  transition: opacity 0.28s cubic-bezier(0.16, 1, 0.3, 1), transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.work-card-cursor-caption.is-visible {
+  opacity: 1;
+  transform: translate(16px, -130%) scale(1);
 }
 
 .work-card-media {
@@ -141,192 +102,56 @@
   gap: var(--space-3);
 }
 
-/* Establishes a query container sized to the actual rendered photo, so
-   every overlay below can size itself in cqw (% of the photo's own
-   width) instead of fixed px. Fixed px overlay content doesn't shrink
-   when the card does — on a narrower viewport the image gets shorter
-   (its height is aspect-ratio-locked) while fixed-size text keeps its
-   height, so it can overflow past the image edge. cqw keeps text,
-   padding and offsets proportional to the image at any card width. */
-.work-card-image-wrap {
-  position: relative;
-  container-type: inline-size;
-}
+/* The card's photo + overlay animation (detection ping / sky frames /
+   cooking instructions) now lives in the shared ProjectThumbnail
+   component (see ProjectThumbnail.jsx/css) so the same markup can
+   drive both this card and the matching case-study hero banner. */
 
-.work-card-image {
-  width: 100%;
-  aspect-ratio: 462 / 245;
-  object-fit: cover;
-  border-radius: var(--radius-image);
-  display: block;
-}
-
-/* BioScent's air-detection ping (486:2496, "Detection"): a radar-style
-   pulse anchored on the device, suggesting it's actively sensing the
-   surrounding air. Two rings expand and fade out on a staggered loop
-   from behind a steady glowing core. */
-.bioscent-detect {
-  position: absolute;
-  width: 2.16cqw;
-  height: 2.16cqw;
-  transform: translate(-50%, -50%);
-  pointer-events: none;
-}
-
-.bioscent-detect-core {
-  position: absolute;
-  inset: 0;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.35) 60%, rgba(255, 255, 255, 0) 100%);
-  box-shadow: 0 0 1.3cqw rgba(255, 255, 255, 0.8);
-}
-
-.bioscent-detect-ring {
-  position: absolute;
-  inset: 0;
-  border-radius: 50%;
-  border: max(1px, 0.3cqw) solid rgba(255, 255, 255, 0.85);
-  animation: bioscent-ping 2.6s ease-out infinite;
-}
-
-.bioscent-detect-ring:nth-child(2) {
-  animation-delay: 1.3s;
-}
-
-@keyframes bioscent-ping {
-  0% {
-    transform: scale(1);
-    opacity: 0.75;
-  }
-  100% {
-    transform: scale(9);
-    opacity: 0;
-  }
-}
-
-/* VisualEyes' floating picture frames (483:2488): four framed photos cut
-   out of the original composite render and re-placed in the sky as a
-   plain positioned overlay, since the current background photo no
-   longer has them baked in. */
-.sky-frames {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-}
-
-.sky-frame {
-  position: absolute;
-  height: auto;
-  animation: sky-frame-drift 5s ease-in-out infinite;
-}
-
-/* Slightly different duration and a negative delay (starts mid-cycle)
-   per frame so the four don't bob in lockstep — reads as wind rather
-   than a mechanical loop. */
-.sky-frame:nth-child(1) {
-  animation-duration: 5.4s;
-  animation-delay: -0.8s;
-}
-
-.sky-frame:nth-child(2) {
-  animation-duration: 4.6s;
-  animation-delay: -2.6s;
-}
-
-.sky-frame:nth-child(3) {
-  animation-duration: 6.1s;
-  animation-delay: -1.4s;
-}
-
-.sky-frame:nth-child(4) {
-  animation-duration: 4.9s;
-  animation-delay: -3.5s;
-}
-
-@keyframes sky-frame-drift {
-  0%,
-  100% {
-    transform: translateY(0) rotate(0deg);
-  }
-  50% {
-    transform: translateY(-3cqw) rotate(-1.6deg);
-  }
-}
-
-/* CookPilot's AR-glasses instruction overlay (482:2478): cycles through
-   the three step cards, each sliding in from the left and holding for
-   INSTRUCTION_DISPLAY_MS before the next replaces it. React re-keys the
-   card on every step change so the slide-in animation replays each time. */
-.cook-instructions {
-  position: absolute;
-  top: 2.6cqw;
-  left: 2.6cqw;
-  width: 74%;
-  pointer-events: none;
-}
-
-.cook-instruction-card {
-  background: rgba(15, 15, 15, 0.88);
-  border-radius: 2.6cqw;
-  padding: 2.16cqw 3.03cqw;
-  color: var(--color-white);
-  opacity: 0;
-  transition: opacity 700ms ease-in-out;
-  animation: cook-instruction-float 3.2s ease-in-out infinite;
-}
-
-.cook-instruction-card.is-visible {
-  opacity: 1;
-}
-
-.cook-instruction-label {
+/* "Next Case Study" card's placeholder "photo" (Figma node 661:1164's
+   own asset there is just a "?" on white, not a real project image) -
+   reuses .thumbnail-image for identical sizing/aspect-ratio/radius to
+   every other card, just swapping ProjectThumbnail's real photo for a
+   plain white fill and a centered glyph. */
+.work-card-placeholder {
   display: flex;
   align-items: center;
-  gap: 1.3cqw;
-  font-family: var(--font-body);
-  font-size: clamp(10px, 2.81cqw, 17px);
-  color: rgba(255, 255, 255, 0.7);
-  margin-bottom: 1.3cqw;
+  justify-content: center;
+  background: var(--color-white);
+  color: var(--color-grey-04);
+  font-family: var(--font-placeholder-glyph); /* Abhaya Libre - was --font-heading (Source Serif 4), sleeker at this size */
+  font-weight: 500; /* Abhaya Libre Medium */
+  font-size: 96px; /* was 64px, +50% */
+  line-height: 1;
 }
 
-.cook-instruction-text {
-  margin: 0;
-  font-family: var(--font-body);
-  font-weight: 600;
-  font-size: clamp(11px, 3.25cqw, 20px);
-  line-height: 1.3;
+/* Subtle bob on the "?" itself, not the whole placeholder box - same
+   vocabulary as .nav-links' own nav-pill-float (Sidebar.css), just its
+   own timing so the two don't feel mechanically identical when both are
+   visible on Home at once. */
+.work-card-placeholder-glyph {
+  display: inline-block;
+  animation: placeholder-glyph-float 3s cubic-bezier(0.45, 0, 0.55, 1) infinite;
 }
 
-.cook-instruction-highlight {
-  color: #ff7a45;
-}
-
-.cook-instruction-meta {
-  display: flex;
-  align-items: center;
-  gap: 0.87cqw;
-  margin-top: 1.73cqw;
-  font-family: var(--font-body);
-  font-size: clamp(10px, 2.81cqw, 17px);
-  color: rgba(255, 255, 255, 0.7);
-}
-
-.cook-instruction-clock {
-  width: clamp(11px, 3.03cqw, 18px);
-  height: clamp(11px, 3.03cqw, 18px);
-  flex-shrink: 0;
-}
-
-@keyframes cook-instruction-float {
+@keyframes placeholder-glyph-float {
   0%,
   100% {
     transform: translateY(0) rotate(0deg);
   }
   25% {
-    transform: translateY(-0.65cqw) rotate(-1.5deg);
+    transform: translateY(-3px) rotate(-4.8deg);
+  }
+  50% {
+    transform: translateY(-6px) rotate(0deg);
   }
   75% {
-    transform: translateY(0.65cqw) rotate(1.5deg);
+    transform: translateY(-3px) rotate(4.8deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .work-card-placeholder-glyph {
+    animation: none;
   }
 }
 
@@ -336,12 +161,14 @@
   gap: var(--space-3);
 }
 
+/* H4 (32px, Regular) - stays the same size in both default and hover
+   states; only the awards/program panel below it appears on hover. */
 .work-card-title {
   margin: 0;
   font-family: var(--font-heading);
-  font-weight: var(--font-weight-h3);
-  font-size: var(--text-h3-size);
-  line-height: var(--text-h3-line-height);
+  font-weight: var(--font-weight-h4);
+  font-size: var(--text-h4-size);
+  line-height: var(--text-h4-line-height);
   color: var(--color-black);
 }
 
@@ -349,8 +176,8 @@
   margin: 0;
   font-family: var(--font-body);
   font-weight: var(--font-weight-body);
-  font-size: var(--text-body-md-size);
-  line-height: var(--text-body-md-line-height);
+  font-size: var(--text-body-sm-size);
+  line-height: var(--text-body-sm-line-height);
   color: var(--color-black);
 }
 
@@ -367,8 +194,8 @@
   flex-direction: column;
   font-family: var(--font-body);
   font-weight: var(--font-weight-body);
-  font-size: var(--text-body-md-size);
-  line-height: var(--text-body-md-line-height);
+  font-size: var(--text-body-sm-size);
+  line-height: var(--text-body-sm-line-height);
   color: var(--color-black);
 }
 
@@ -399,9 +226,13 @@
 .work-card-reveal-inner {
   font-family: var(--font-body);
   font-weight: var(--font-weight-body);
-  font-size: var(--text-body-md-size);
-  line-height: var(--text-body-md-line-height);
+  font-size: var(--text-body-sm-size);
+  line-height: var(--text-body-sm-line-height);
   color: var(--color-black);
+}
+
+.work-card-reveal-inner p:first-child {
+  font-weight: 700;
 }
 
 .work-card-reveal-inner p {
@@ -411,16 +242,6 @@
 /* ---------- Tablet (640px - 1024px) ---------- */
 
 @media (min-width: 640px) {
-  .sidebar {
-    padding: var(--space-6) var(--space-5);
-  }
-
-  .name {
-    font-weight: var(--font-weight-h2);
-    font-size: var(--text-h2-size);
-    line-height: var(--text-h2-line-height);
-  }
-
   .work-grid {
     flex-direction: row;
     align-items: flex-start;
@@ -436,34 +257,17 @@
     gap: var(--space-4);
   }
 
-  .work-card-title {
-    font-weight: var(--font-weight-h2);
-    font-size: var(--text-h2-size);
-    line-height: var(--text-h2-line-height);
-  }
 }
 
 /* ---------- Desktop (1025px+) ---------- */
 
 @media (min-width: 1025px) {
+  /* stretch (not flex-start): the beige sidebar fill should always reach
+     as far down as the taller of [sidebar content, card column] - i.e.
+     all the way to the footer - not stop short at its own content height. */
   .home {
     flex-direction: row;
-    align-items: flex-start;
-  }
-
-  .sidebar {
-    flex: 0 0 340px;
-    width: 340px;
-    min-height: 100vh;
-    position: sticky;
-    top: 0;
-    padding: var(--space-7) var(--space-6);
-  }
-
-  .name {
-    font-weight: var(--font-weight-h1);
-    font-size: var(--text-h1-size);
-    line-height: var(--text-h1-line-height);
+    align-items: stretch;
   }
 
   /* No max-width here: flex:1 plus this 80px padding is what keeps the

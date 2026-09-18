@@ -1,0 +1,106 @@
+/* Fixed full-viewport canvas the silver confetti trail is drawn onto.
+   Sits just under the cursor dot's z-index so sparks appear to trail
+   behind it rather than on top. */
+.custom-cursor-confetti {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 9998;
+  pointer-events: none;
+}
+
+/* Outer element only handles position/size/shape - it's what
+   CustomCursor.jsx writes the per-frame translate() onto, so it must
+   never also carry a CSS `transform` (e.g. for the pulse below) or the
+   two would fight every frame. All visible fill lives on the nested
+   .custom-cursor-core instead. */
+.custom-cursor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  pointer-events: none;
+  will-change: transform, width, height;
+  transition: width 420ms cubic-bezier(0.34, 1.56, 0.64, 1), height 420ms cubic-bezier(0.34, 1.56, 0.64, 1),
+    border-radius 420ms cubic-bezier(0.34, 1.56, 0.64, 1), opacity 200ms ease-out;
+}
+
+.custom-cursor-core {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border-radius: inherit;
+  background: var(--color-main-gold); /* default dot color; the expanded pill overrides this with its own glass fill below */
+  transition: background 200ms ease-out;
+}
+
+.custom-cursor--default {
+  width: 19.2px;
+  height: 19.2px;
+  border-radius: 50%;
+}
+
+/* Gentle breathing scale + glow so the resting dot reads as alive
+   instead of a static sticker. Lives on the inner core (not the outer
+   .custom-cursor) so it never competes with the per-frame position
+   transform written in JS. */
+.custom-cursor--default .custom-cursor-core {
+  animation: cursor-pulse 1.8s ease-in-out infinite;
+}
+
+@keyframes cursor-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.15);
+  }
+}
+
+/* 160x32 solid dark pill per the redesigned Figma "Trailing cursor"
+   component (513:2895) - a near-opaque dark fill reads on any work-card
+   photo on its own, so the glass blur/border from the prior version is
+   no longer needed. */
+.custom-cursor--expanded {
+  width: 160px;
+  height: 32px;
+  border-radius: 40px;
+}
+
+.custom-cursor--expanded .custom-cursor-core {
+  background: rgba(0, 0, 0, 0.7);
+}
+
+/* Hidden while over selectable body copy - the system text cursor takes
+   over there instead (see index.css). Kept at dot size underneath so it
+   doesn't glitch to a large size right before fading back in elsewhere. */
+.custom-cursor--text {
+  width: 19.2px;
+  height: 19.2px;
+  border-radius: 50%;
+  opacity: 0;
+}
+
+.custom-cursor-label {
+  position: relative;
+  z-index: 1;
+  font-family: var(--font-body);
+  /* Bold/12px/white is one-off to this redesigned pill (513:2895), not an
+     existing type token. */
+  font-weight: 700;
+  font-size: 12px;
+  line-height: normal;
+  color: var(--color-white);
+  opacity: 0;
+  transition: opacity 200ms ease-out;
+}
+
+.custom-cursor--expanded .custom-cursor-label {
+  opacity: 1;
+  transition-delay: 120ms; /* shape grows first, label follows a beat later */
+}

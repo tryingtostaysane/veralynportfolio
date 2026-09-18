@@ -1,0 +1,1211 @@
+/* VisualEyes case study. Shared case-study layout classes (.case-study,
+   .case-study-section, .case-study-hero, .case-study-hero-banner*,
+   .case-study-hero-info, .case-study-title, .case-study-subtitle,
+   .case-study-meta*, .case-study-tag) come from BioScent.css, which
+   defines them generically for reuse across case studies - see the
+   comment on .case-study-tag there. Only the piece that differs per
+   project (VisualEyes' dark-blue fill, vs BioScent's green) is
+   overridden here. */
+/* Hero meta panel (node 573:2902) was tightened to py-[20px] in the
+   latest Figma edit, half the shared .case-study-meta's 40px vertical
+   padding - horizontal stays at the shared 80px. */
+.case-study-meta-visualeyes {
+  background: var(--color-visualeyes-dark-blue);
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+
+/* Figma's two meta columns (573:2904 "Team/Role/Skills", 573:2908
+   "Program/Tools") are content-sized but, at the design's 825px panel
+   width, their combined width plus the 45px gap already spans almost
+   the full inner width - so the panel reads as one edge-to-edge block,
+   not two columns hugging the left with a gap on the right. The shared
+   .case-study-meta only sets flex-direction/gap at desktop (no
+   justify-content), which left VisualEyes's columns flush-left with a
+   growing empty gap on the right at any viewport wider than that fixed
+   825px design frame. space-between pins column 1 to the left edge and
+   column 2 to the right edge at every width, reproducing the design's
+   edge-to-edge look responsively instead of only at one exact size. */
+@media (min-width: 1025px) {
+  .case-study-meta-visualeyes {
+    justify-content: space-between;
+  }
+}
+
+/* "Finding what the group is passionate about" (Figma node 573:2931):
+   tag+heading intro, two stacked photos, then a quote-style callout -
+   gap-[40px] between each of those three blocks. */
+.case-study-visualeyes-passion {
+  gap: var(--space-6);
+}
+
+/* Tags component (node 573:2933) on VisualEyes uses the page's own
+   dark-blue fill with white text, unlike BioScent's light-green/black
+   default (.case-study-tag) - same override pattern as CookPilot's
+   .case-study-tag-cookpilot in CookPilot.css. */
+.case-study-tag-visualeyes {
+  background: var(--color-visualeyes-dark-blue);
+  color: var(--color-white);
+}
+
+/* Node 573:2934: gap-[8px] between the heading and its description -
+   tighter than the 16px .case-study-section-intro gap above it. */
+.case-study-visualeyes-heading-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+/* This section's heading (node 573:2935) and the "Existing solution"
+   section's heading/sub-heading (573:3094, 573:3118) were all resized
+   to the 28px/Regular H5 style in the latest Figma edit - same as
+   .case-study-section-heading, but kept as its own class since these
+   headings sit inside .case-study-visualeyes-heading-group's 8px gap
+   rather than .case-study-section-intro's 16px gap. */
+.case-study-visualeyes-heading {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-weight: var(--font-weight-h5);
+  font-size: var(--text-h5-size);
+  line-height: var(--text-h5-line-height);
+  color: var(--color-black);
+  font-optical-sizing: var(--font-optical-sizing-heading);
+  font-variation-settings: var(--font-variation-heading);
+}
+
+/* Node 573:2949: the mind-map diagram and sticky-note photo stacked
+   flush (no gap - the earlier 16px gap was removed in the latest Figma
+   edit), each already-cropped as a single flattened export - rendered
+   at their own aspect ratio rather than a forced crop. */
+.case-study-visualeyes-passion-images {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+}
+
+.case-study-visualeyes-passion-image {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: var(--radius-sm);
+}
+
+/* Sticky-note photo (node 438:25321) was resized to exactly half the
+   mind-map's width/height/radius in the latest edit (412.5/825 = 50%,
+   8px vs 16px radius) - no longer matches the full-width default
+   above. */
+.case-study-visualeyes-passion-image-sm {
+  width: 50%;
+  border-radius: 8px;
+}
+
+/* Quote callout (node 573:2950): dark-blue fill, beige text - same
+   colors as the hero meta panel, centered via padding rather than the
+   fixed 160px height Figma states (that height only exists to fit this
+   one line at this one viewport width). */
+.case-study-visualeyes-callout {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-visualeyes-dark-blue);
+  border-radius: var(--radius-card);
+  padding: var(--space-6);
+  width: 100%;
+}
+
+.case-study-visualeyes-callout p {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-weight: var(--font-weight-h5);
+  font-size: var(--text-h5-size);
+  line-height: var(--text-h5-line-height);
+  color: var(--color-bioscent-beige);
+  font-optical-sizing: var(--font-optical-sizing-heading);
+  font-variation-settings: var(--font-variation-heading);
+}
+
+/* "What is Balance?" (node 573:2953): just the shared tag/heading/
+   description intro block, no image or callout - reuses
+   .case-study-section-intro, .case-study-tag(-visualeyes) and
+   .case-study-section-heading/-description as-is, so no section-
+   specific rules are needed beyond the desktop padding tightening
+   below. */
+
+/* "Finding what 'Balance' means to students" (node 573:2960): intro,
+   board photo, 3-photo strip, then Key Findings - gap-[40px] between
+   each, same shell as .case-study-visualeyes-passion above. */
+.case-study-visualeyes-interview {
+  gap: var(--space-6);
+}
+
+/* Node 573:2964: intro paragraph, then a real decimal-numbered list of
+   observations (unlike the card-counter convention .case-study-
+   assumptions-item uses elsewhere) - browser default markers indented
+   24px per Figma's ms-[24px]. */
+.case-study-visualeyes-observations {
+  width: 100%;
+  font-family: var(--font-body);
+  font-weight: var(--font-weight-body);
+  font-size: var(--text-body-sm-size);
+  line-height: var(--text-body-sm-line-height);
+  color: var(--color-black);
+}
+
+.case-study-visualeyes-observations p {
+  margin: 0;
+}
+
+.case-study-visualeyes-observations ol {
+  margin: 0;
+  padding-left: 24px;
+}
+
+/* Whiteboard photo (node 573:2968): unlike every other case-study image
+   so far, Figma gives this one no border-radius - kept square-cornered
+   to match. Fixed 498px height at desktop only; mobile/tablet fall back
+   to the same aspect ratio as the hero banner treatment. */
+.case-study-visualeyes-board-image {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 825 / 498;
+  object-fit: cover;
+}
+
+/* 3-photo strip (node 438:25345): same "flex row, equal-fill tiles,
+   literal Figma gap/radius, one representative aspect-ratio" pattern as
+   .case-study-reflection-collage-row in BioScent.css. Figma sets the
+   whole row's opacity to 90%, not just each photo. */
+.case-study-visualeyes-interview-photos {
+  display: flex;
+  gap: 12.539px;
+  width: 100%;
+  opacity: 0.9;
+}
+
+/* Wrapper for each interview photo - hosts the cursor-following caption
+   pop-up (.case-study-visualeyes-interview-photo-caption below), so sizing
+   that used to live on the <img> itself now lives here instead; the <img>
+   just fills it (see .case-study-visualeyes-interview-photo below). */
+.case-study-visualeyes-interview-photo-item {
+  position: relative;
+  overflow: hidden;
+  cursor: default;
+  flex: 1 1 0%;
+  min-width: 0;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 266 / 355;
+  border-radius: 10.157px;
+}
+
+.case-study-visualeyes-interview-photo {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Cursor-following hover caption - same behavior/tuning as BioScent's own
+   .case-study-reflection-collage-caption, kept as its own rule set (own
+   visualeyes-prefixed classes) rather than shared, matching this file's
+   existing convention. Always mounted (visibility toggled via
+   .is-visible) so opacity/transform are plain transitions - a symmetric
+   fade in on hover and fade out on un-hover. */
+.case-study-visualeyes-interview-photo-caption {
+  position: absolute;
+  top: 0;
+  left: 0;
+  max-width: min(220px, 80%);
+  padding: 8px 14px;
+  background: rgba(23, 23, 20, 0.92);
+  border-radius: 4px;
+  color: var(--color-white);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  line-height: 1.4;
+  pointer-events: none;
+  z-index: 2;
+  opacity: 0;
+  transform: translate(16px, -120%) scale(0.96);
+  transition: opacity 0.28s cubic-bezier(0.16, 1, 0.3, 1), transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.case-study-visualeyes-interview-photo-caption.is-visible {
+  opacity: 1;
+  transform: translate(16px, -130%) scale(1);
+}
+
+.case-study-visualeyes-findings {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  width: 100%;
+}
+
+/* Key Findings cards (node 573:2977): same "flex row, equal-fill,
+   alternating grey fill" convention as .case-study-pain-points-list in
+   CookPilot.css, but numbered - reuses the counter technique from
+   .case-study-assumptions-item in BioScent.css instead of a real <ol>,
+   since each card is only ever a single item (no wrapped multi-line
+   numbering to get right). */
+.case-study-visualeyes-findings-list {
+  counter-reset: finding;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.case-study-visualeyes-findings-item {
+  counter-increment: finding;
+  flex: 1 1 0%;
+  min-width: 0;
+  background: var(--color-grey-bg);
+  border-radius: var(--radius-card);
+  padding: var(--space-6) var(--space-3);
+  padding-left: calc(var(--space-3) + 24px);
+  text-indent: -24px;
+  box-sizing: border-box;
+  font-family: var(--font-body);
+  font-size: var(--text-body-sm-size);
+  line-height: var(--text-body-sm-line-height);
+  color: var(--color-black);
+}
+
+.case-study-visualeyes-findings-item::before {
+  content: counter(finding) '. ';
+}
+
+.case-study-visualeyes-findings-item-alt {
+  background: var(--color-sidebar-bg);
+}
+
+@media (min-width: 1025px) {
+  .case-study-visualeyes-findings-list {
+    flex-direction: row;
+  }
+}
+
+/* "Student archetypes" (node 573:2989/2990): intro block, then the
+   carousel card - a literal 20px gap, not on the base scale and
+   distinct from the 40px gap every other VisualEyes section uses. */
+.case-study-visualeyes-personas {
+  gap: 20px;
+}
+
+/* Node 573:2991: gap-[8px] between tag and heading - tighter than the
+   shared .case-study-section-intro's 16px, so this section can't reuse
+   that class as-is. */
+.case-study-visualeyes-personas-intro {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  width: 100%;
+}
+
+/* Tags component on "Student archetypes" uses the page's light-blue
+   fill (node 573:2992) rather than the dark-blue every other VisualEyes
+   tag uses - text stays black, same as the shared .case-study-tag
+   default, so only the background needs overriding. */
+.case-study-tag-visualeyes-light {
+  background: var(--color-visualeyes-blue);
+}
+
+/* Carousel card (nodes 573:2989/3057/3058): photo + title/description/
+   nav stacked side by side, gap-[40px] - each Figma "card" is really
+   the same layout with different content/image, cycled by the two nav
+   buttons rather than built as 3 separate DOM sections. */
+.case-study-visualeyes-personas-card {
+  display: flex;
+  gap: var(--space-6);
+  align-items: flex-start;
+  width: 100%;
+  animation: case-study-visualeyes-personas-slide-in-right 0.4s ease;
+}
+
+.case-study-visualeyes-personas-card[data-direction='-1'] {
+  animation-name: case-study-visualeyes-personas-slide-in-left;
+}
+
+@keyframes case-study-visualeyes-personas-slide-in-right {
+  from {
+    opacity: 0;
+    transform: translateX(32px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes case-study-visualeyes-personas-slide-in-left {
+  from {
+    opacity: 0;
+    transform: translateX(-32px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .case-study-visualeyes-personas-card {
+    animation: none;
+  }
+}
+
+/* Figma states 354x371 (node 573:3018 etc) - radius differs slightly
+   per persona (8.64px/12px/12px), close enough to standardize on 12px
+   for one shared class. */
+.case-study-visualeyes-personas-image {
+  flex-shrink: 0;
+  width: 100%;
+  max-width: 354px;
+  aspect-ratio: 354 / 371;
+  object-fit: cover;
+  border-radius: 12px;
+}
+
+.case-study-visualeyes-personas-info {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  flex: 1 1 0%;
+  min-width: 0;
+}
+
+/* Nav buttons (node 573:3027/3028/3029): same literal sizing as
+   BioScent's .case-study-research-nav-button (41.184px button,
+   24.024px icon, 13.728px gap) but VisualEyes' own dark-blue fill -
+   kept as a separate class rather than reusing that one, matching the
+   "each page defines its own carousel nav color" convention CookPilot's
+   .case-study-solution-nav-button already follows. */
+.case-study-visualeyes-personas-nav {
+  display: flex;
+  gap: 13.728px;
+  align-items: center;
+}
+
+.case-study-visualeyes-personas-nav-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 41.184px;
+  height: 41.184px;
+  padding: 10.296px;
+  background: var(--color-visualeyes-dark-blue);
+  border: none;
+  border-radius: 50%;
+  color: var(--color-white);
+  cursor: pointer;
+}
+
+.case-study-visualeyes-personas-nav-button:hover {
+  opacity: 0.85;
+}
+
+.case-study-visualeyes-personas-nav-button svg {
+  width: 24.024px;
+  height: 24.024px;
+}
+
+@media (max-width: 640px) {
+  .case-study-visualeyes-personas-card {
+    flex-direction: column;
+  }
+}
+
+/* "Refining of our challenge" (node 574:3170): same shell as "What is
+   Balance?" above - just the shared tag/heading/description intro
+   block, no image or callout. */
+
+/* "How might we..." (node 573:3083): tag directly above the same
+   dark-blue/beige callout card used for "This led us to one keyword..."
+   above (.case-study-visualeyes-callout) - same shell as BioScent's own
+   .case-study-how-might-we (tag as a direct section child, not wrapped
+   in .case-study-section-intro), gap-[16px] between the two. */
+.case-study-visualeyes-hmw {
+  gap: var(--space-3);
+}
+
+/* "We first diverged, then converged..." (node 573:3090): intro,
+   3-photo wall strip, then the criteria block - gap-[40px] between each,
+   same shell as .case-study-visualeyes-passion above. */
+.case-study-visualeyes-existing-solution {
+  gap: var(--space-6);
+}
+
+/* 3-photo strip (node 573:3112): same "flex row, equal-fill, literal
+   Figma gap/radius, one representative aspect-ratio, 90% row opacity"
+   pattern as .case-study-visualeyes-interview-photos above, just its
+   own (slightly different) literal gap/radius/ratio values. */
+.case-study-visualeyes-existing-solution-photos {
+  display: flex;
+  gap: var(--space-3);
+  width: 100%;
+  opacity: 0.9;
+}
+
+.case-study-visualeyes-existing-solution-photo {
+  display: block;
+  flex: 1 1 0%;
+  min-width: 0;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 262 / 350;
+  object-fit: cover;
+  border-radius: 10.015px;
+}
+
+/* Node 573:3121: sub-heading, 3-criteria row, then closing paragraph -
+   gap-[16px], distinct from the 40px gap between this and the photo
+   strip above it. */
+.case-study-visualeyes-criteria-block {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  width: 100%;
+}
+
+/* Criteria cards (node 573:3101): same padding/radius as
+   .case-study-visualeyes-findings-item, but centered (no hanging-indent
+   number to conflict with flex-centering here) and a different fill
+   pattern - first card solid grey, the other two translucent, not a
+   strict alternation. */
+.case-study-visualeyes-criteria-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.case-study-visualeyes-criteria-item {
+  flex: 1 1 0%;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  background: var(--color-grey-bg);
+  border-radius: var(--radius-card);
+  padding: var(--space-6) var(--space-3);
+  box-sizing: border-box;
+  font-family: var(--font-body);
+  font-size: var(--text-body-sm-size);
+  line-height: var(--text-body-sm-line-height);
+  color: var(--color-black);
+}
+
+.case-study-visualeyes-criteria-item-translucent {
+  background: var(--color-sidebar-bg);
+}
+
+@media (min-width: 1025px) {
+  .case-study-visualeyes-criteria-list {
+    flex-direction: row;
+  }
+}
+
+/* "Low-Fidelity" (node 574:3219): 3 stacked comparison blocks (Intro
+   Screen, Safety Declaration, Privacy Preferences) - gap-[40px] between
+   them, same as most other VisualEyes section-level gaps. Only the
+   first block carries the LOW-FIDELITY tag; the other two are plain
+   headings, same "one tag labels several stacked headings" convention
+   as .case-study-visualeyes-hmw. */
+.case-study-visualeyes-lowfi {
+  gap: var(--space-6);
+}
+
+/* Each block (nodes 574:3269/3270/3271): heading (+ tag on the first),
+   then its own photo-pair + version-comparison body - gap-[16px]. */
+.case-study-visualeyes-lowfi-block {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  width: 100%;
+}
+
+/* Node 574:3220: gap-[16px] between the tag and "Intro Screen" -
+   matches .case-study-section-intro's gap exactly, but that class
+   assumes a trailing description this block doesn't have. */
+.case-study-visualeyes-lowfi-heading-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  width: 100%;
+}
+
+/* Nodes 574:3238/3243/3257: photo pair, then the V1/V2 row - literal
+   gap-[20px]. */
+.case-study-visualeyes-lowfi-body {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+}
+
+.case-study-visualeyes-lowfi-photos {
+  display: flex;
+  gap: var(--space-1);
+  width: 100%;
+}
+
+/* Each pair's two sketches share a height in Figma but aren't quite
+   equal width (e.g. 407px/410px) - flex-fill both equally and use one
+   representative aspect ratio per pair, same "close enough to
+   standardize" approach as .case-study-visualeyes-interview-photo.
+   Radius also varies slightly per pair (7.882/8.284/8.713px) - kept as
+   one shared ~8px value rather than 3 near-identical numbers. */
+.case-study-visualeyes-lowfi-photo {
+  display: block;
+  flex: 1 1 0%;
+  min-width: 0;
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.case-study-visualeyes-lowfi-photo-intro {
+  aspect-ratio: 408.5 / 304.5;
+}
+
+.case-study-visualeyes-lowfi-photo-safety {
+  aspect-ratio: 408.5 / 276;
+}
+
+.case-study-visualeyes-lowfi-photo-privacy {
+  aspect-ratio: 406.5 / 290;
+}
+
+/* V1/V2 comparison cards (nodes 574:3230/3248/3262 etc): stacked by
+   default, row at desktop - same responsive convention as
+   .case-study-visualeyes-criteria-list/-findings-list above. */
+.case-study-visualeyes-lowfi-versions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  width: 100%;
+}
+
+/* Same padding/radius/fill pattern as .case-study-visualeyes-criteria-item,
+   but left-aligned (not centered) text, and a gap-[8px] between the
+   "V1:"/"V2:" label and its description instead of Figma's literal
+   blank-line spacer paragraph. */
+.case-study-visualeyes-lowfi-version {
+  flex: 1 1 0%;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: var(--space-1);
+  background: var(--color-grey-bg);
+  border-radius: var(--radius-card);
+  padding: var(--space-6) var(--space-3);
+  box-sizing: border-box;
+  font-family: var(--font-body);
+  font-size: var(--text-body-sm-size);
+  line-height: var(--text-body-sm-line-height);
+  color: var(--color-black);
+}
+
+.case-study-visualeyes-lowfi-version p {
+  margin: 0;
+}
+
+.case-study-visualeyes-lowfi-version-alt {
+  background: var(--color-sidebar-bg);
+}
+
+@media (min-width: 1025px) {
+  .case-study-visualeyes-lowfi-versions {
+    flex-direction: row;
+  }
+}
+
+/* "High-Fidelity" (node 574:3316): 4 stacked screens (Intro Screen,
+   Declaration, Privacy Preferences, Quiz) - gap-[40px] between them,
+   same shell as .case-study-visualeyes-lowfi above. Only the first
+   carries the HIGH-FIDELITY tag, same convention as that section. */
+.case-study-visualeyes-hifi {
+  gap: var(--space-6);
+}
+
+/* Each block (nodes 574:3317/3345/3346/3350): heading (+ tag on the
+   first), then its full-width screen mockup - gap-[16px]. */
+.case-study-visualeyes-hifi-block {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  width: 100%;
+}
+
+/* Node 574:3318: gap-[16px] between the tag and "Intro Screen" - same
+   pattern as .case-study-visualeyes-lowfi-heading-group above. */
+.case-study-visualeyes-hifi-heading-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  width: 100%;
+}
+
+/* The 4 screens are near-identical size in Figma (449/445/446/446px
+   tall at the fixed 825px design width, radius 9.957-12.447px) - same
+   "close enough to standardize" treatment as the low-fidelity photos
+   above, one representative aspect ratio/radius for all 4. */
+.case-study-visualeyes-hifi-image {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 825 / 446;
+  object-fit: cover;
+  border-radius: 11px;
+}
+
+/* "3D World Experimentation" (node 574:3378): intro block, 2 method
+   groups, an "Input type" heading, then its own thumbnail row -
+   gap-[40px] between all 5, same section-level gap as most other
+   VisualEyes sections. */
+.case-study-visualeyes-3dworld {
+  gap: var(--space-6);
+}
+
+/* Node 574:3379: tag, heading-group, then the 3-question row -
+   gap-[16px]. Its heading (574:3382) is 40px/Medium (H3 style), not
+   the usual 28px/Regular H5 every other section heading on this page
+   uses - reuses the existing 8px-gap .case-study-visualeyes-heading-group
+   wrapper, but needs its own heading class since
+   .case-study-visualeyes-heading was changed to H5 earlier. */
+.case-study-visualeyes-3dworld-intro {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  width: 100%;
+}
+
+/* Shared by "Spatial & Multimodal Experiment" and the 3 sub-headings
+   below it ("Navigating 3D Space...", "World generation...", "Input
+   type...") - all 4 use this same 40px/Medium H3 style in Figma. */
+.case-study-visualeyes-experiment-heading {
+  margin: 0;
+  width: 100%;
+  font-family: var(--font-heading);
+  font-weight: var(--font-weight-h3);
+  font-size: var(--text-h3-size);
+  line-height: var(--text-h3-line-height);
+  color: var(--color-black);
+  font-optical-sizing: var(--font-optical-sizing-heading);
+  font-variation-settings: var(--font-variation-heading);
+}
+
+/* 3-question row (node 574:3391): same padding/radius/fill pattern as
+   .case-study-visualeyes-criteria-item (first card solid grey, other
+   two translucent, centered text) - kept as its own class per this
+   page's per-section duplication convention rather than reusing that
+   section's class directly. */
+.case-study-visualeyes-questions-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.case-study-visualeyes-questions-item {
+  flex: 1 1 0%;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  background: var(--color-grey-bg);
+  border-radius: var(--radius-card);
+  padding: var(--space-6) var(--space-3);
+  box-sizing: border-box;
+  font-family: var(--font-body);
+  font-size: var(--text-body-sm-size);
+  line-height: var(--text-body-sm-line-height);
+  color: var(--color-black);
+}
+
+.case-study-visualeyes-questions-item-translucent {
+  background: var(--color-sidebar-bg);
+}
+
+@media (min-width: 1025px) {
+  .case-study-visualeyes-questions-list {
+    flex-direction: row;
+  }
+}
+
+/* Method group (nodes 574:3473/3474): H3 sub-heading, then its stacked
+   method items - literal gap-[20px]. */
+.case-study-visualeyes-3dworld-group {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+}
+
+/* One method (nodes 574:3450/3451/3476/3495): heading+media block,
+   then its dark-blue takeaway callout (reuses
+   .case-study-visualeyes-callout as-is) - literal gap-[8px]. */
+.case-study-visualeyes-3dworld-method {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  width: 100%;
+}
+
+/* Nodes 574:3418/3452/3477/3496: the method's own H5 heading, then its
+   media - gap-[16px]. */
+.case-study-visualeyes-3dworld-method-header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  width: 100%;
+}
+
+/* Keyboard/console media (nodes 438:25519/25520/25527/25528): Figma
+   showed these as empty fills with no extractable asset (the Figma
+   screenshot rendered real demo footage, but that fill couldn't be
+   exported through this tool, likely because it was a video fill
+   rather than a static image) - now real screen-recording clips
+   supplied directly as project assets, autoplaying with sound (falling
+   back to muted, with a toggle) once scrolled into view, like every
+   other video on this site (see SectionVideo.jsx). Literal
+   gap/aspect-ratio/radius from Figma. */
+.case-study-visualeyes-3dworld-media-row {
+  display: flex;
+  gap: var(--space-1);
+  width: 100%;
+}
+
+/* Now the SectionVideo frame (see SectionVideo.jsx) rather than the
+   video element itself - position:relative/overflow:hidden host the
+   video (sized via .section-video, plain fill) and its sound toggle. */
+.case-study-visualeyes-3dworld-media {
+  position: relative;
+  display: block;
+  flex: 1 1 0%;
+  min-width: 0;
+  width: 100%;
+  aspect-ratio: 408.5 / 228;
+  overflow: hidden;
+  background: var(--color-grey-bg);
+  border-radius: 17px;
+}
+
+/* AI-generated/preset-world media (nodes 438:25542/25548): same demo-
+   clip treatment as .case-study-visualeyes-3dworld-media above, just
+   single and full-width instead of a side-by-side pair. */
+/* SectionVideo frame, same treatment as .case-study-visualeyes-3dworld-media above. */
+.case-study-visualeyes-3dworld-media-single {
+  position: relative;
+  display: block;
+  width: 100%;
+  aspect-ratio: 825 / 464;
+  overflow: hidden;
+  background: var(--color-grey-bg);
+  border-radius: var(--radius-card);
+}
+
+/* Input-type thumbnails (node 574:3551): 3 near-equal columns
+   (273/279.667/272px) - flex-fill evenly, stacked by default and a row
+   at desktop, same responsive convention as
+   .case-study-visualeyes-questions-list above. */
+.case-study-visualeyes-input-types {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  width: 100%;
+}
+
+.case-study-visualeyes-input-type {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+  flex: 1 1 0%;
+  min-width: 0;
+  width: 100%;
+}
+
+.case-study-visualeyes-input-type-image {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 6 / 5;
+  object-fit: cover;
+  border-radius: 12.6px;
+}
+
+/* Text card (nodes 574:3516/3542/3546): same padding/radius as
+   .case-study-visualeyes-questions-item, but all 3 solid grey (no
+   translucent alternation this time) and centered. */
+.case-study-visualeyes-input-type-text {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  width: 100%;
+  background: var(--color-grey-bg);
+  border-radius: var(--radius-card);
+  padding: var(--space-6) var(--space-3);
+  box-sizing: border-box;
+  font-family: var(--font-body);
+  font-size: var(--text-body-sm-size);
+  line-height: var(--text-body-sm-line-height);
+  color: var(--color-black);
+}
+
+@media (min-width: 1025px) {
+  .case-study-visualeyes-input-types {
+    flex-direction: row;
+  }
+}
+
+/* Matches the "tighten to 40px vertical padding at desktop" treatment
+   every non-hero BioScent/CookPilot section uses (see BioScent.css) -
+   Figma states py-[40px] here too, not the standard 80px inset. */
+@media (min-width: 1025px) {
+  .case-study-visualeyes-passion,
+  .case-study-visualeyes-balance,
+  .case-study-visualeyes-interview,
+  .case-study-visualeyes-personas,
+  .case-study-visualeyes-refined-challenge,
+  .case-study-visualeyes-hmw,
+  .case-study-visualeyes-existing-solution,
+  .case-study-visualeyes-lowfi,
+  .case-study-visualeyes-hifi,
+  .case-study-visualeyes-3dworld,
+  .case-study-visualeyes-quiz-input,
+  .case-study-visualeyes-user-testing,
+  .case-study-visualeyes-reflection,
+  .case-study-visualeyes-thank-you {
+    padding-top: var(--space-6);
+    padding-bottom: var(--space-6);
+  }
+}
+
+/* "Quiz input -> World generation (Using hero journey concept)"
+   (Figma node 574:3574): tag/heading/description is the shared
+   .case-study-tag-visualeyes/.case-study-section-heading/-description
+   trio as-is - Figma states a 16px gap here rather than the 40px most
+   other VisualEyes sections use between intro and body. Figma's own
+   layout for the body below is stacked (media placeholder full-width,
+   then a 2-col card grid) - overridden here to a left/right split
+   (prompt left, question list right) per direct request, while still
+   pulling every value (grey fill, --radius-card, the section's own
+   type styles) from the same tokens/classes the rest of the page
+   uses. Only the placeholder's fill (.case-study-visualeyes-quiz-
+   prompt below) and the buttons' active state are this build's own
+   addition on top of Figma's empty placeholder - Figma has neither
+   real prompt copy nor a click interaction here. */
+.case-study-visualeyes-quiz-input {
+  gap: var(--space-3);
+}
+
+.case-study-visualeyes-quiz-body {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 20px;
+  width: 100%;
+}
+
+.case-study-visualeyes-quiz-prompt {
+  flex: 1 1 0%;
+  min-width: 0;
+  width: 100%;
+  box-sizing: border-box;
+  background: var(--color-grey-bg);
+  border-radius: var(--radius-card);
+  padding: var(--space-6) var(--space-5);
+}
+
+.case-study-visualeyes-quiz-prompt-text {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: var(--text-body-sm-size);
+  line-height: 1.6;
+  color: var(--color-black);
+}
+
+/* Each highlightable phrase carries its own category color as a CSS
+   var (set inline per instance, one of the existing cross-project
+   brand tokens - see the comment on QUIZ_MAPPING in VisualEyes.jsx)
+   so this one rule handles all 5 - tinted by default, solid once its
+   matching question card below is clicked. */
+.case-study-visualeyes-quiz-segment {
+  padding: 0.05em 0.4em;
+  border-radius: 6px;
+  background: var(--quiz-color-soft);
+  color: rgba(0, 0, 0, 0.45);
+  transition: background 200ms ease, color 200ms ease;
+}
+
+.case-study-visualeyes-quiz-segment.is-active {
+  background: var(--quiz-color);
+  color: var(--color-white);
+  font-weight: 600;
+}
+
+.case-study-visualeyes-quiz-prompt-note {
+  margin: var(--space-3) 0 0;
+  font-family: var(--font-body);
+  font-style: italic;
+  font-size: 13px;
+  color: var(--color-grey-04);
+}
+
+/* Right column: the 5 question cards stacked in one list, since here
+   they share a half-width column with the prompt, not the section's
+   full 825px width. */
+.case-study-visualeyes-quiz-questions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  flex: 1 1 0%;
+  min-width: 0;
+  width: 100%;
+}
+
+/* Question card: a real <button> (keyboard/screen-reader operable),
+   using the same fill/radius/spacing tokens as other flat cards on this
+   page (.case-study-visualeyes-input-type-text, etc.), sized for its own
+   half-width column rather than a fixed height. Its
+   category color (--quiz-color, set inline per instance) only shows
+   up once active, as a border + faint tint - the same color that
+   lights up the matching phrase in the prompt to its left. */
+.case-study-visualeyes-quiz-question {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  box-sizing: border-box;
+  background: var(--color-grey-bg);
+  border: 2px solid transparent;
+  border-radius: var(--radius-card);
+  padding: var(--space-3) var(--space-4);
+  font: inherit;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 200ms ease, background 200ms ease;
+}
+
+.case-study-visualeyes-quiz-question:hover {
+  border-color: var(--quiz-color-soft);
+}
+
+.case-study-visualeyes-quiz-question.is-active {
+  border-color: var(--quiz-color);
+  background: var(--quiz-color-soft);
+}
+
+@media (min-width: 1025px) {
+  .case-study-visualeyes-quiz-body {
+    flex-direction: row;
+  }
+}
+
+/* "User Feedbacks" (Figma node 574:3602): tag+heading intro (no
+   description, unlike most other section intros), then a 2-column
+   quote row, then a 2-photo row - gap-[40px] between all three,
+   the standard section-level gap. */
+.case-study-visualeyes-user-testing {
+  gap: var(--space-6);
+}
+
+.case-study-visualeyes-testing-quotes {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+  font-family: var(--font-body);
+  font-size: var(--text-body-sm-size);
+  line-height: var(--text-body-sm-line-height);
+  color: var(--color-black);
+}
+
+.case-study-visualeyes-testing-quote {
+  flex: 1 1 0%;
+  min-width: 0;
+}
+
+.case-study-visualeyes-testing-quote p {
+  margin: 0;
+}
+
+/* Figma sets an extra blank line between this column's two quotes
+   (absent from the first column, whose two lines run on directly) -
+   reproduced as a margin instead of an empty paragraph. */
+.case-study-visualeyes-testing-quote-spaced p:first-child {
+  margin-bottom: var(--space-3);
+}
+
+@media (min-width: 1025px) {
+  .case-study-visualeyes-testing-quotes {
+    flex-direction: row;
+  }
+}
+
+/* 2-photo row (nodes 438:25620/438:25624): same "flex row, equal-fill
+   tiles, literal Figma gap/radius, one representative aspect-ratio"
+   pattern as .case-study-visualeyes-interview-photos above - the two
+   source photos are 327x462 and 348x463, close enough to share one
+   ratio without visibly cropping either. */
+.case-study-visualeyes-testing-photos {
+  display: flex;
+  gap: 16.8px;
+  width: 100%;
+}
+
+.case-study-visualeyes-testing-photo {
+  display: block;
+  flex: 1 1 0%;
+  min-width: 0;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 327 / 462;
+  object-fit: cover;
+  border-radius: 14.4px;
+}
+
+/* "Designing for 3D space = designing beyond UIUX" (Figma node
+   574:3638): tag+heading intro (no description, same shell as "User
+   Feedbacks" above), then a 3-col "Learning N" row, then a photo
+   block - gap-[40px] between all three, the standard section-level
+   gap. */
+.case-study-visualeyes-reflection {
+  gap: var(--space-6);
+}
+
+.case-study-visualeyes-reflection-learnings {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  width: 100%;
+}
+
+.case-study-visualeyes-reflection-learning {
+  flex: 1 1 0%;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.case-study-visualeyes-reflection-learning p {
+  margin: 0;
+}
+
+@media (min-width: 1025px) {
+  .case-study-visualeyes-reflection-learnings {
+    flex-direction: row;
+  }
+}
+
+/* Photo block (node 438:25636): 2 rows of 2 equal-fill photos
+   (401x225/402x225, radius exactly matching --radius-card already),
+   then one full-width wide photo below - gap-[16px] throughout. */
+.case-study-visualeyes-reflection-photos {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  width: 100%;
+}
+
+.case-study-visualeyes-reflection-photo-row {
+  display: flex;
+  gap: var(--space-3);
+  width: 100%;
+}
+
+.case-study-visualeyes-reflection-photo {
+  display: block;
+  flex: 1 1 0%;
+  min-width: 0;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 401 / 225;
+  object-fit: cover;
+  border-radius: var(--radius-card);
+}
+
+/* SectionVideo frame, same treatment as .case-study-visualeyes-3dworld-media above. */
+.case-study-visualeyes-reflection-photo-wide {
+  position: relative;
+  display: block;
+  width: 100%;
+  aspect-ratio: 825 / 565;
+  overflow: hidden;
+  border-radius: var(--radius-card);
+}
+
+/* "Thank You" (Figma node 574:3664/3665): eyebrow line, then a filled
+   card (title + description) - tightened further to gap-[16px] in the
+   latest Figma edit (was 40px, then 20px). Same shell as CookPilot's
+   .case-study-cookpilot-thank-you*, own class prefix for the same
+   reason that one isn't called .case-study-thank-you*: BioScent.css
+   already defines that name globally with different colors
+   (bioscent-green-light card, black text vs this dark-blue card, white
+   text). */
+.case-study-visualeyes-thank-you {
+  gap: var(--space-3);
+}
+
+.case-study-visualeyes-thank-you-eyebrow {
+  margin: 0;
+  font-family: var(--font-body);
+  font-weight: var(--font-weight-body);
+  font-size: var(--text-body-md-size);
+  line-height: var(--text-body-md-line-height);
+  color: var(--color-black);
+}
+
+.case-study-visualeyes-thank-you-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  width: 100%;
+  background: var(--color-visualeyes-dark-blue);
+  border-radius: var(--radius-card);
+  padding: var(--space-6);
+  box-sizing: border-box;
+}
+
+.case-study-visualeyes-thank-you-title {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-weight: var(--font-weight-h2);
+  font-size: var(--text-h2-size);
+  line-height: var(--text-h2-line-height);
+  color: var(--color-white);
+  font-optical-sizing: var(--font-optical-sizing-heading);
+  font-variation-settings: var(--font-variation-heading);
+}
+
+.case-study-visualeyes-thank-you-description {
+  margin: 0;
+  font-family: var(--font-body);
+  font-weight: var(--font-weight-body);
+  font-size: var(--text-body-md-size);
+  line-height: var(--text-body-md-line-height);
+  color: var(--color-white);
+}

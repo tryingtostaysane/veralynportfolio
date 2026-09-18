@@ -1,19 +1,15 @@
-import { useEffect, useState } from 'react'
-import bioscentImg from '../assets/work-cards/bioscent.jpg'
-import cookpilotImg from '../assets/work-cards/cookpilot.jpg'
-import visualeyesImg from '../assets/work-cards/visualeyes.jpg'
-import visualeyesFrameMeeting from '../assets/work-cards/visualeyes-frame-meeting.png'
-import visualeyesFramePresentation from '../assets/work-cards/visualeyes-frame-presentation.png'
-import visualeyesFrameGallery from '../assets/work-cards/visualeyes-frame-gallery.png'
-import visualeyesFrameVideoCall from '../assets/work-cards/visualeyes-frame-video-call.png'
+import { useRef, useState } from 'react'
+import { Link } from 'react-router-dom'
+import Sidebar from './Sidebar.jsx'
+import Footer from './Footer.jsx'
+import ProjectThumbnail from './ProjectThumbnail.jsx'
+import { bioscentImg, cookpilotImg, visualeyesImg, COOKPILOT_COOKING_INSTRUCTIONS, BIOSCENT_CARD_DETECTION_POINT, VISUALEYES_CARD_SKY_FRAMES } from '../data/projectThumbnails.js'
 import './Home.css'
-
-const INSTRUCTION_HOLD_MS = 4800
-const INSTRUCTION_FADE_MS = 700
 
 const works = [
   {
     id: 'bioscent',
+    href: '/work/bioscent',
     image: bioscentImg,
     title: 'BioScent',
     description: 'Making invisible health signals visible through AI-powered VOC sensing.',
@@ -26,10 +22,11 @@ const works = [
         'Tencent Future CloseUp ’26 | 3rd Place',
       ],
     },
-    detectionPoint: { left: 77.34, top: 59.39 },
+    detectionPoint: BIOSCENT_CARD_DETECTION_POINT,
   },
   {
     id: 'cookpilot',
+    href: '/work/cookpilot',
     image: cookpilotImg,
     title: 'CookPilot',
     description: 'An intelligent hands-free cooking assistant with Meta AI Glasses.',
@@ -39,27 +36,11 @@ const works = [
       label: 'Awards \u{1F3C6}:',
       lines: ['ICON UNSW x Lyra ’26 | 1st Place'],
     },
-    cookingInstructions: [
-      {
-        label: 'Step 1 of 5',
-        text: ['Toast bread slices in pan or toaster until golden ', { highlight: 'brown.' }],
-        meta: '4 min',
-      },
-      {
-        label: 'Step 2 of 5',
-        text: ['Fry spam bacon in a pan on medium heat until cooked ', { highlight: 'through.' }],
-        meta: '5 min',
-      },
-      {
-        label: 'Cooking assistant',
-        icon: '✨',
-        text: ['Spam looks pale and starting to cook. Keep frying on ', { highlight: 'medium' }, ' until brown and hot'],
-        meta: null,
-      },
-    ],
+    cookingInstructions: COOKPILOT_COOKING_INSTRUCTIONS,
   },
   {
     id: 'visualeyes',
+    href: '/work/visualeyes',
     image: visualeyesImg,
     title: 'VisualEyes',
     description: 'An immersive environment that helps student see a possible version of their future self.',
@@ -69,109 +50,83 @@ const works = [
       label: 'Program:',
       lines: ['Apple Foundation Program @ UTS ’26'],
     },
-    skyFrames: [
-      { src: visualeyesFrameMeeting, left: 32.44, top: 14.78, width: 12.45 },
-      { src: visualeyesFramePresentation, left: 57.48, top: 8.11, width: 7.57 },
-      { src: visualeyesFrameGallery, left: 55.51, top: 31.08, width: 10.75 },
-      { src: visualeyesFrameVideoCall, left: 36.92, top: 47.8, width: 6.81 },
-    ],
+    skyFrames: VISUALEYES_CARD_SKY_FRAMES,
+  },
+  // "Next Case Study" (Figma node 661:1164, added in the bottom-right
+  // grid slot alongside the 3 real projects) - a playful CTA card, not a
+  // real case study: the "photo" is a plain white placeholder with a "?"
+  // (Figma's own asset there is just that question mark on white, not a
+  // meaningful photo - reproduced as a real glyph instead of importing a
+  // throwaway image). Links out to email since the card's own copy
+  // ("Hit me up!") is an invitation to get in touch, matching the
+  // sidebar's "Let's chat!" destination.
+  {
+    id: 'next-case-study',
+    href: 'mailto:veralynliyi@gmail.com',
+    title: 'Next Case Study',
+    description: 'I’m looking for the next problem to solve. Want to yap on an idea or keen to build something together? Hit me up!',
+    role: 'My Role: ?',
+    team: 'My Team : YOU !',
+    placeholder: true,
+    caption: 'Let’s yap',
   },
 ]
 
-function CookingInstructions({ instructions }) {
-  const [index, setIndex] = useState(0)
-  const [visible, setVisible] = useState(true)
+function WorkCard({ id, href, image, title, description, role, team, reveal, cookingInstructions, skyFrames, detectionPoint, placeholder, caption = 'View project' }) {
+  // Projects without a built case study page stay plain, unclickable
+  // article cards; internal case-study links are real react-router
+  // links; the "Next Case Study" card's href is a mailto: (external),
+  // so it gets a plain <a> instead - react-router's <Link to> resolves
+  // its target as an internal route path and would mangle a mailto URI.
+  // `viewTransition` wraps internal navigation in the browser's View
+  // Transitions API for a subtle page-level ease between Home and the
+  // case-study page (see the ::view-transition-old(root)/-new(root) rule
+  // in index.css) - no named shared elements, just the two pages easing
+  // into each other. Unsupported browsers (Firefox, as of this writing)
+  // just navigate normally, no fallback code needed.
+  const isExternal = href?.includes(':')
+  const Wrapper = href ? (isExternal ? 'a' : Link) : 'article'
+  const wrapperProps = href
+    ? { [isExternal ? 'href' : 'to']: href, ...(isExternal ? {} : { viewTransition: true }), className: 'work-card', 'data-project': id }
+    : { className: 'work-card', 'data-project': id }
 
-  useEffect(() => {
-    const holdTimer = setTimeout(() => setVisible(false), INSTRUCTION_HOLD_MS)
-    return () => clearTimeout(holdTimer)
-  }, [index])
+  // "* View project *" cursor-following caption - used to be drawn by the
+  // now-removed CustomCursor (it morphed into a pill with this label over
+  // any .work-card). Restored here as its own hover element, following the
+  // same "position via ref, visibility via state" pattern as the collage
+  // captions in BioScent/CookPilot/VisualEyes/AboutMe, so it doesn't need
+  // the global custom cursor to exist.
+  const [hovering, setHovering] = useState(false)
+  const captionRef = useRef(null)
+  const posRef = useRef({ x: 0, y: 0 })
 
-  useEffect(() => {
-    if (visible) return
-    const fadeTimer = setTimeout(() => {
-      setIndex((current) => (current + 1) % instructions.length)
-      setVisible(true)
-    }, INSTRUCTION_FADE_MS)
-    return () => clearTimeout(fadeTimer)
-  }, [visible, instructions.length])
-
-  const step = instructions[index]
+  const updatePos = (e) => {
+    const rect = e.currentTarget.getBoundingClientRect()
+    posRef.current = { x: e.clientX - rect.left, y: e.clientY - rect.top }
+    if (captionRef.current) {
+      captionRef.current.style.left = `${posRef.current.x}px`
+      captionRef.current.style.top = `${posRef.current.y}px`
+    }
+  }
 
   return (
-    <div className="cook-instructions">
-      <div className={`cook-instruction-card${visible ? ' is-visible' : ''}`}>
-        <div className="cook-instruction-label">
-          {step.icon && <span>{step.icon}</span>}
-          <span>{step.label}</span>
-        </div>
-        <p className="cook-instruction-text">
-          {step.text.map((part, i) =>
-            typeof part === 'string' ? (
-              part
-            ) : (
-              <span className="cook-instruction-highlight" key={i}>
-                {part.highlight}
-              </span>
-            )
-          )}
-        </p>
-        {step.meta && (
-          <div className="cook-instruction-meta">
-            <ClockIcon />
-            <span>{step.meta}</span>
-          </div>
-        )}
-      </div>
-    </div>
-  )
-}
-
-function ClockIcon() {
-  return (
-    <svg className="cook-instruction-clock" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-      <circle cx="8" cy="8" r="6.25" stroke="currentColor" strokeWidth="1.3" />
-      <path d="M8 4.75V8L10.2 9.4" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  )
-}
-
-function SkyFrames({ frames }) {
-  return (
-    <div className="sky-frames">
-      {frames.map((frame) => (
-        <img
-          key={frame.src}
-          className="sky-frame"
-          src={frame.src}
-          alt=""
-          style={{ left: `${frame.left}%`, top: `${frame.top}%`, width: `${frame.width}%` }}
-        />
-      ))}
-    </div>
-  )
-}
-
-function DeviceDetector({ point }) {
-  return (
-    <div className="bioscent-detect" style={{ left: `${point.left}%`, top: `${point.top}%` }}>
-      <span className="bioscent-detect-ring" />
-      <span className="bioscent-detect-ring" />
-      <span className="bioscent-detect-core" />
-    </div>
-  )
-}
-
-function WorkCard({ id, image, title, description, role, team, reveal, cookingInstructions, skyFrames, detectionPoint }) {
-  return (
-    <article className="work-card" data-project={id}>
+    <Wrapper
+      {...wrapperProps}
+      onMouseEnter={(e) => {
+        updatePos(e)
+        setHovering(true)
+      }}
+      onMouseLeave={() => setHovering(false)}
+      onMouseMove={updatePos}
+    >
       <div className="work-card-media">
-        <div className="work-card-image-wrap">
-          <img className="work-card-image" src={image} alt="" />
-          {cookingInstructions && <CookingInstructions instructions={cookingInstructions} />}
-          {skyFrames && <SkyFrames frames={skyFrames} />}
-          {detectionPoint && <DeviceDetector point={detectionPoint} />}
-        </div>
+        {placeholder ? (
+          <div className="thumbnail-image work-card-placeholder" aria-hidden="true">
+            <span className="work-card-placeholder-glyph">?</span>
+          </div>
+        ) : (
+          <ProjectThumbnail image={image} cookingInstructions={cookingInstructions} skyFrames={skyFrames} detectionPoint={detectionPoint} />
+        )}
         <div className="work-card-heading">
           <h2 className="work-card-title">{title}</h2>
           <p className="work-card-description">{description}</p>
@@ -192,49 +147,40 @@ function WorkCard({ id, image, title, description, role, team, reveal, cookingIn
           </div>
         </div>
       )}
-    </article>
+      <span
+        ref={(node) => {
+          captionRef.current = node
+          if (node) {
+            node.style.left = `${posRef.current.x}px`
+            node.style.top = `${posRef.current.y}px`
+          }
+        }}
+        className={`work-card-cursor-caption${hovering ? ' is-visible' : ''}`}
+        aria-hidden="true"
+      >
+        {`* ${caption} *`}
+      </span>
+    </Wrapper>
   )
 }
 
 export default function Home() {
   return (
-    <div className="home">
-      <aside className="sidebar">
-        <div className="sidebar-top">
-          <div className="intro">
-            <h1 className="name">
-              Veralyn
-              <br />
-              Chong
-            </h1>
-            <p className="bio">
-              Designer at heart, currently studying Computer Science @ UTS.
-              <br />
-              <br />
-              I&rsquo;m passionate about building thoughtful products that solve actual problems, and I&rsquo;m exploring where design, engineering and AI come together.
-            </p>
+    <>
+      <div className="home">
+        <Sidebar />
+        <main className="work-grid" id="work">
+          <div className="work-column">
+            <WorkCard {...works[0]} />
+            <WorkCard {...works[2]} />
           </div>
-          <hr className="sidebar-divider" />
-          <nav className="nav-links">
-            <a href="#work">Works &rarr;</a>
-            <a href="#about">About Me &rarr;</a>
-          </nav>
-        </div>
-        <div className="contact">
-          <p>Let&rsquo;s chat !</p>
-          <p>LinkedIn: @veralynliyi</p>
-          <p>E: veralynliyi@gmail.com</p>
-        </div>
-      </aside>
-      <main className="work-grid" id="work">
-        <div className="work-column">
-          <WorkCard {...works[0]} />
-          <WorkCard {...works[2]} />
-        </div>
-        <div className="work-column">
-          <WorkCard {...works[1]} />
-        </div>
-      </main>
-    </div>
+          <div className="work-column">
+            <WorkCard {...works[1]} />
+            <WorkCard {...works[3]} />
+          </div>
+        </main>
+      </div>
+      <Footer />
+    </>
   )
 }

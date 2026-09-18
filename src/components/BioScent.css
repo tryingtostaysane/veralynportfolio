@@ -1,0 +1,1334 @@
+/* Same page shell as Home (.home / .work-grid in Home.css): sidebar +
+   main column, stacked on mobile/tablet and side-by-side (with the
+   sidebar sticky) from desktop. See Home.css for why .home uses
+   align-items: stretch at desktop - the same reasoning applies here so
+   the beige sidebar fill always reaches the footer. */
+.case-study {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background: var(--color-white);
+}
+
+/* Figma stacks each section frame flush against the next (no gap) -
+   each section's own padding provides the visual separation. */
+.case-study-main {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Every section shares the same px-[168px] py-[80px] inset (Figma
+   nodes 432:22558, 432:22584, ...) - vertical matches space-7 but
+   horizontal is off-scale, kept literal. */
+.case-study-section {
+  display: flex;
+  flex-direction: column;
+  padding: var(--space-4);
+}
+
+/* Figma node 432:22560: banner image, then a title+meta wrapper
+   (525:3227), gap-[40px] between them. */
+.case-study-hero {
+  gap: var(--space-6);
+}
+
+/* Figma node 525:3227: title block then meta panel, gap-[16px] -
+   different from the 40px gap above, so this needs its own wrapper
+   rather than being flattened into .case-study-hero. */
+.case-study-hero-info {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.case-study-hero-intro {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+/* Same H3 style as the sidebar name (.name in Sidebar.css). */
+.case-study-title {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-weight: var(--font-weight-h3);
+  font-size: var(--text-h3-size);
+  line-height: var(--text-h3-line-height);
+  color: var(--color-black);
+  font-optical-sizing: var(--font-optical-sizing-heading);
+  font-variation-settings: var(--font-variation-heading);
+}
+
+.case-study-subtitle {
+  margin: 0;
+  font-family: var(--font-body);
+  font-weight: var(--font-weight-body);
+  font-size: var(--text-body-md-size);
+  line-height: var(--text-body-md-line-height);
+  color: var(--color-black);
+}
+
+/* Figma node 432:22565 "hero-banner": rounded-[15px] - matches
+   --radius-image (15px, HOME work-card thumbnails) exactly rather than
+   --radius-sm (16px) or --radius-card (20px). Now holds the shared
+   ProjectThumbnail (photo + overlay animation, same one used on the
+   HOME work-card) instead of a separate static banner photo - see
+   src/data/projectThumbnails.js for the hero-specific aspect ratio and
+   overlay coordinates passed in per project. */
+.case-study-hero-banner {
+  border-radius: var(--radius-image);
+  overflow: hidden;
+}
+
+/* Role/team/skills/awards panel (Figma node 523:2912): px-[80px]
+   py-[40px]. Column 1 stacks its two blocks (Team/Role/Team, then
+   Skills) with a 20px gap; column 2 is just the Awards block on its
+   own. Fill switched from grey to the bioscent green, with beige text
+   instead of black, to match. The two columns are now wrapped in a
+   "Fill container" row (node 526:3231) with a fixed 45px gap between
+   them, replacing the old space-filling layout - see the desktop
+   override below for the row-specific gap. */
+.case-study-meta {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  background: var(--color-bioscent-green);
+  border-radius: var(--radius-card);
+  padding: var(--space-6) var(--space-7);
+  font-family: var(--font-body);
+  font-size: var(--text-body-sm-size);
+  line-height: var(--text-body-sm-line-height);
+  color: var(--color-bioscent-beige);
+}
+
+/* 20px isn't on the base scale (nearest tokens are 16px/24px), kept
+   literal - Figma node 523:2910. Only matters for column 1 (Team+Role
+   block, then Skills block); column 2 (Awards) is a single block. */
+.case-study-meta-column {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.case-study-meta-block p {
+  margin: 0;
+}
+
+/* Fixed 304px per Figma (node 432:22576) - forces "Vibe Coding" onto
+   its own line, same as the design. */
+.case-study-meta-block-skills {
+  width: 304px;
+  max-width: 100%;
+}
+
+/* Section label pill (Figma "Tags" component, node 382:715/382:712) -
+   reused by every later section, not just this one. bg matches
+   --color-bioscent-green-light exactly. Figma states py-[16px] on a
+   32px-tall box, which doesn't leave room for even one line of text at
+   any normal line-height - so height is pinned to 32px (matching the
+   box) and vertical placement comes from flex-centering instead;
+   horizontal padding (--space-4) is kept as stated. */
+.case-study-tag {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: fit-content;
+  height: 32px;
+  background: var(--color-bioscent-green-light);
+  border-radius: var(--radius-pill);
+  padding: 0 var(--space-4);
+  font-family: var(--font-body);
+  font-size: 12px;
+  line-height: normal;
+  color: var(--color-black);
+  white-space: nowrap;
+}
+
+/* w-full per Figma (node 432:22586) - without this, the parent's
+   align-items: flex-end (below, for the assumptions list) would also
+   shrink-and-right-shift this whole tag/heading/description block
+   instead of leaving it flush left. */
+.case-study-section-intro {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  width: 100%;
+}
+
+/* H5 style (28px/Regular) - shared by every section heading seen so far
+   ("Where we started ?" 432:22588, "Globally, about 1 in 5..." 432:22582),
+   keeping the page's own <h1> unique. */
+.case-study-section-heading {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-weight: var(--font-weight-h5);
+  font-size: var(--text-h5-size);
+  line-height: var(--text-h5-line-height);
+  color: var(--color-black);
+  font-optical-sizing: var(--font-optical-sizing-heading);
+  font-variation-settings: var(--font-variation-heading);
+}
+
+/* Body-sm (16px) description - both section descriptions seen so far
+   ("Where we started ?" 432:22589 and the "Problem" stat paragraph
+   432:22583) use this size; the latter's bold-italic emphasis span is
+   just <strong><em> inheriting it, not extra CSS. */
+.case-study-section-description {
+  margin: 0;
+  font-family: var(--font-body);
+  font-weight: var(--font-weight-body);
+  font-size: var(--text-body-sm-size);
+  line-height: var(--text-body-sm-line-height);
+  color: var(--color-black);
+}
+
+/* "Initial Assumptions" (Figma node 524:3226): intro block then a row
+   of 3 compact cards, both flush left - gap-[20px] isn't on the base
+   spacing scale, kept literal. */
+.case-study-assumptions-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 20px;
+}
+
+.case-study-assumptions-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: assumption;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+/* Figma nodes 524:3218/3219/3223: rounded-[20px] (--radius-card),
+   px-[16px] py-[40px]. Hanging indent (padding + negative text-indent)
+   keeps a wrapped line aligned under the text instead of under the
+   "1." marker. */
+.case-study-assumptions-item {
+  counter-increment: assumption;
+  background: var(--color-grey-bg);
+  border-radius: var(--radius-card);
+  padding: var(--space-6) var(--space-3);
+  padding-left: calc(var(--space-3) + 24px);
+  text-indent: -24px;
+  font-family: var(--font-body);
+  font-size: var(--text-body-sm-size);
+  line-height: var(--text-body-sm-line-height);
+  color: var(--color-black);
+}
+
+.case-study-assumptions-item::before {
+  content: counter(assumption) '. ';
+}
+
+/* Middle card (Figma node 524:3219) uses a translucent fill
+   (rgba(245,245,245,0.7), matching --color-sidebar-bg) instead of the
+   solid --color-grey-bg the other two cards use. */
+.case-study-assumptions-item-translucent {
+  background: var(--color-sidebar-bg);
+}
+
+/* "Inspiration" (Figma node 524:2936/432:22709): tag/heading block, the
+   two-image row, then the closing paragraph - gap-[20px] isn't on the
+   base scale, kept literal like the sibling sections above. */
+.case-study-inspiration {
+  gap: 20px;
+}
+
+/* gap-[16px] (--space-3) between the two tiles, matching Figma exactly. */
+.case-study-inspiration-images {
+  display: flex;
+  gap: var(--space-3);
+  width: 100%;
+}
+
+/* Fixed 325:426 box per Figma, but flexible so the pair shrinks together
+   (rather than overflowing) below desktop instead of a second, unbuilt
+   mobile crop. */
+.case-study-inspiration-image {
+  position: relative;
+  flex: 1;
+  max-width: 325px;
+  aspect-ratio: 325 / 426;
+  border-radius: 10px; /* off the base scale (nearest tokens are 5px/16px); kept literal */
+  overflow: hidden;
+}
+
+.case-study-inspiration-image img {
+  position: absolute;
+  max-width: none;
+}
+
+/* Both tiles crop the SAME composite source image
+   (dog-detection.png, the two photos Figma flattened into one fill) at
+   different offsets/scale - these percentages are copied directly from
+   Figma's own export rather than derived, so they're kept literal. */
+.case-study-inspiration-image-dog {
+  top: -3.66%;
+  left: -4.48%;
+  width: 209.1%;
+  height: 108.92%;
+}
+
+.case-study-inspiration-image-article {
+  top: -4.45%;
+  left: -136.01%;
+  width: 245%;
+  height: 127.62%;
+}
+
+/* Figma split the closing copy into two paragraphs with a blank line
+   before "We thought" (node 662:1226) - same 1em paragraph gap as
+   .case-study-research-fact-description elsewhere on this page. */
+.case-study-inspiration-description {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+  width: 100%;
+}
+
+/* "Research Insights" (Figma node 432:22597/432:22598): gap between
+   the tag/heading block and the content row below, now a literal 20px
+   (not on the base scale) - separate from the 8px gap between tag and
+   heading within that first block. */
+.case-study-research {
+  gap: 20px;
+}
+
+.case-study-research-intro {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  width: 100%;
+}
+
+.case-study-research-body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  width: 100%;
+}
+
+/* Carousel nav (Figma node 432:22605): two circular buttons, sized up
+   from 28.8px to 41.184px (and gap/padding/icon scaled with them,
+   1.43x throughout) - none of these land on the base scale, kept
+   literal. */
+.case-study-research-nav {
+  display: flex;
+  gap: 13.728px;
+  align-items: center;
+}
+
+.case-study-research-nav-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 41.184px;
+  height: 41.184px;
+  padding: 10.296px;
+  background: var(--color-bioscent-green);
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.case-study-research-nav-button svg {
+  width: 24.024px;
+  height: 24.024px;
+}
+
+/* Carousel slide-in: keyed by activeInsight in JSX so React remounts
+   this element on every navigation, replaying the animation; the
+   direction (data-direction, set alongside the same state update)
+   picks which side it slides in from. */
+@keyframes case-study-research-slide-in-right {
+  from {
+    opacity: 0;
+    transform: translateX(32px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes case-study-research-slide-in-left {
+  from {
+    opacity: 0;
+    transform: translateX(-32px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.case-study-research-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  animation: case-study-research-slide-in-right 0.4s ease;
+}
+
+.case-study-research-content[data-direction='-1'] {
+  animation-name: case-study-research-slide-in-left;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .case-study-research-content {
+    animation: none;
+  }
+}
+
+/* "Insight 1" (Figma node 544:3319/544:3320): the stat block ("20+
+   articles researched") is gone - now just a title, a two-paragraph
+   description, and the carousel nav buttons stacked with a single
+   16px gap. Fixed 428px column (not flex-fill) - the card comes first
+   in the row now, this comes second. */
+.case-study-research-facts {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-3);
+  width: 428px;
+  max-width: 100%;
+}
+
+/* H5 style (28px/Regular) - same combo as .case-study-section-heading,
+   changed from the earlier H4 size (32px). */
+.case-study-research-fact-title {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-weight: var(--font-weight-h5);
+  font-size: var(--text-h5-size);
+  line-height: var(--text-h5-line-height);
+  color: var(--color-black);
+  font-optical-sizing: var(--font-optical-sizing-heading);
+  font-variation-settings: var(--font-variation-heading);
+}
+
+/* Two paragraphs with a blank line between them in Figma (an empty
+   paragraph spacer) - reproduced here as a gap between real paragraphs
+   instead of an invisible zero-width-space line. No longer separately
+   constrained - just fills the 428px facts column like the title. */
+.case-study-research-fact-description {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+  width: 100%;
+}
+
+.case-study-research-fact-description > p {
+  margin: 0;
+  font-family: var(--font-body);
+  font-weight: var(--font-weight-body);
+  font-size: var(--text-body-sm-size);
+  line-height: var(--text-body-sm-line-height);
+  color: var(--color-black);
+}
+
+/* "Insight 2" (Figma node 545:3350): a labelled list of existing
+   technologies at a smaller 12px, stacked with no extra gap between
+   lines (unlike the 1em gap above separating this whole block from the
+   paragraph before it) - each line wraps a single sentence. */
+.case-study-research-tech-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.case-study-research-tech-list p {
+  margin: 0;
+  font-family: var(--font-body);
+  font-weight: var(--font-weight-body);
+  font-size: 12px;
+  line-height: normal;
+  color: var(--color-black);
+}
+
+/* Browser-screenshot collage card (Figma node 375:240): a background
+   frame with two overlapping screenshots positioned by percentage, per
+   the design - kept fluid instead of the literal fixed 351x371 so it
+   scales down on narrower screens. */
+.case-study-research-card {
+  position: relative;
+  width: 100%;
+  max-width: 351px;
+  aspect-ratio: 351 / 371;
+  border-radius: 11.2px;
+  overflow: hidden;
+}
+
+/* The source photo (research-bg.jpg) is landscape with grey sky filling
+   its top half - the card is portrait (351x371), so plain object-fit:
+   cover is height-constrained and always shows the full image height
+   (sky included) no matter the object-position. Figma's fill is
+   manually zoomed/cropped to show only the green field, so this uses a
+   background-image with an explicit zoom instead of <img>+cover. */
+.case-study-research-card-bg {
+  position: absolute;
+  inset: 0;
+  background-image: none;
+  background-repeat: no-repeat;
+  background-size: 320% auto;
+  background-position: center 100%;
+}
+
+.case-study-research-card-collage {
+  position: absolute;
+  inset: 19.6px 18.48px 14.56px 16.8px;
+}
+
+.case-study-research-screenshot {
+  position: absolute;
+  border-radius: 4px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.case-study-research-screenshot-1 {
+  left: 3.88%;
+  top: 6.9%;
+  width: 65.87%;
+}
+
+.case-study-research-screenshot-2 {
+  left: 36.78%;
+  top: 40.84%;
+  width: 58.42%;
+}
+
+/* "Insight 2" card (Figma node 545:3344): a single photo filling the
+   whole collage slot, replacing the two-screenshot overlap - card-scale
+   radius (11.2px) and no shadow, unlike the small overlapping
+   screenshots above. */
+.case-study-research-screenshot-main {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 11.2px;
+}
+
+/* Carousel pagination dots - one per insight, centered under the card
+   and facts row. Not in Figma; added to make the carousel's current
+   position visible alongside the nav arrows. */
+.case-study-research-dots {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: var(--space-1);
+  width: 100%;
+}
+
+.case-study-research-dot {
+  width: 8px;
+  height: 8px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: var(--color-bioscent-green);
+  opacity: 0.35;
+  cursor: pointer;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.case-study-research-dot:hover {
+  opacity: 0.6;
+}
+
+.case-study-research-dot-active {
+  opacity: 1;
+  transform: scale(1.25);
+}
+
+/* "How Might We" (Figma node 432:22610/432:22611): tag then a
+   full-width card, gap-[16px] between them. Card fill switched from
+   grey to the bioscent green (matching the hero meta panel), with
+   beige text instead of black. */
+.case-study-how-might-we {
+  gap: var(--space-3);
+}
+
+.case-study-hmw-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
+  height: 160px;
+  background: var(--color-bioscent-green);
+  border-radius: var(--radius-card);
+  padding: var(--space-6);
+  box-sizing: border-box;
+}
+
+/* H5 style (28px/Regular serif) - Figma node 432:22614, back to the
+   serif heading style (was briefly Body-md/20px sans). */
+.case-study-hmw-question {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-weight: var(--font-weight-h5);
+  font-size: var(--text-h5-size);
+  line-height: var(--text-h5-line-height);
+  color: var(--color-bioscent-beige);
+  font-optical-sizing: var(--font-optical-sizing-heading);
+  font-variation-settings: var(--font-variation-heading);
+}
+
+/* "Ecosystem" / "Personal Intelligence" (Figma node 524:2928/524:2935):
+   tag+heading intro, then the diagram, gap-[80px] between them - same
+   shell pattern as Research Insights. Figma's own 792px content column
+   is centered via items-center, but at Figma's fixed 1161px canvas that
+   only ever produces a ~16.5px gap either side (792 vs 825 available) -
+   effectively edge-to-edge. Capping this at a literal 792px and
+   centering it here would instead leave a huge, wrong-looking gap at
+   any wider real viewport, so this stays full width like every other
+   section's content column. */
+.case-study-ecosystem-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-7);
+  width: 100%;
+}
+
+.case-study-ecosystem-intro {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-3);
+  width: 100%;
+}
+
+/* H5 style (28px/Regular) - same combo as .case-study-section-heading;
+   node 432:22619 was resized down from H3 (40px/Medium). */
+.case-study-ecosystem-heading {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-weight: var(--font-weight-h5);
+  font-size: var(--text-h5-size);
+  line-height: var(--text-h5-line-height);
+  color: var(--color-black);
+  font-optical-sizing: var(--font-optical-sizing-heading);
+  font-variation-settings: var(--font-variation-heading);
+}
+
+/* Ecosystem diagram (Figma node 602:2303) - the designer's own exported
+   image, used directly rather than reconstructed as HTML/CSS. */
+.case-study-ecosystem-diagram {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 20px;
+}
+
+/* "User Journey" (Figma node 555:2150): tag, then the two Before/After
+   tracks stacked gap-40 apart - each its own heading + a static 5-card
+   row (no carousel; 5 steps fit the row without scrolling).
+   container-type: inline-size turns on the cqw units below, so the
+   whole row scales up/down with the section's own fluid width exactly
+   like the Ecosystem diagram does, instead of staying pinned at its
+   literal Figma pixel size while every other section's content fills
+   the available width. */
+.case-study-journey-tracks {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  width: 100%;
+  margin-top: var(--space-3);
+  container-type: inline-size;
+}
+
+/* Each track (Figma node 555:2157/555:2158): heading, gap-16, card row. */
+.user-journey-track {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  width: 100%;
+}
+
+/* H5 style (28px/Regular) - same combo as .case-study-section-heading;
+   nodes 555:2143/555:2145 were resized down from H3 (40px/Medium). */
+.user-journey-track-heading {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-weight: var(--font-weight-h5);
+  font-size: var(--text-h5-size);
+  line-height: var(--text-h5-line-height);
+  color: var(--color-black);
+  font-optical-sizing: var(--font-optical-sizing-heading);
+  font-variation-settings: var(--font-variation-heading);
+}
+
+/* Card row (Figma nodes 555:1883/555:2142): 5 cards + connector arrows,
+   gap-[2.94px] on every side of an arrow (a plain flex gap reproduces
+   this since it applies between every adjacent pair), left-aligned (the
+   flex default) so it stays flush with the tag/heading above it exactly
+   like Figma. cqw sizing (see .user-journey-card etc.) makes the whole
+   row scale up/down with the section's fluid width - at Figma's own
+   825px content width the row already fills ~99% of it, so this reads
+   as filling the section rather than a fixed, non-growing block like
+   before. Wraps only as a fallback on very narrow viewports. */
+.user-journey-track-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.356cqw;
+}
+
+/* Figma nodes 555:1869 etc: ~26.5px connector arrow between each pair
+   of cards, coloured with the darker bioscent-green (#73804a). cqw
+   values here and below are all relative to the 825px basis (Figma's
+   standard content width) that .user-journey-track-row's container
+   query uses, so 100cqw = a full-width row, matching Figma exactly at
+   that width and scaling proportionally above/below it. */
+.user-journey-connector {
+  flex: none;
+  width: 3.207cqw;
+  height: 1.276cqw;
+  color: var(--color-bioscent-green);
+}
+
+/* UserJourneyCard (Figma component, e.g. node 553:4103-554:4659):
+   16.661cqw wide (137.445px at the 825px basis), hugs its content
+   height. Before cards are flat bioscent-beige, After cards are flat
+   bioscent-green-light (no alternating fill). The illustration is a
+   single flattened image per card (each one is a unique bespoke
+   multi-part vector composition in Figma, reproduced here as one
+   exported asset per concept rather than hand-rebuilding every card's
+   nested vector art). */
+.user-journey-card {
+  flex: none;
+  width: 16.661cqw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.425cqw;
+  padding: 1.782cqw;
+  border-radius: 1.782cqw;
+  box-sizing: border-box;
+}
+
+.user-journey-card-beige {
+  background: var(--color-bioscent-beige);
+}
+
+.user-journey-card-green {
+  background: var(--color-bioscent-green-light);
+}
+
+.user-journey-card-text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.713cqw;
+  width: 100%;
+}
+
+.user-journey-card-number {
+  margin: 0;
+  flex: none;
+  width: 2.673cqw;
+  height: 2.673cqw;
+  border-radius: 50%;
+  background: var(--color-bioscent-forest);
+  color: var(--color-bioscent-green-light);
+  font-family: var(--font-body-alt);
+  font-size: 1.782cqw;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.user-journey-card-title {
+  margin: 0;
+  font-family: var(--font-subheader);
+  font-size: 1.782cqw;
+  letter-spacing: -0.053cqw;
+  line-height: normal;
+  color: var(--color-bioscent-forest);
+}
+
+.user-journey-card-description {
+  margin: 0;
+  font-family: var(--font-body);
+  font-weight: var(--font-weight-body);
+  font-size: 1.069cqw;
+  line-height: 1.2;
+  color: var(--color-bioscent-forest);
+}
+
+.user-journey-card-icon-slot {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 9.176cqw;
+  height: 6.861cqw;
+}
+
+.user-journey-card-icon {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+/* "Solution" (Figma node 524:2936): tag+heading intro (gap-8, tighter
+   than the usual gap-16 - see .case-study-solution .case-study-section-
+   intro override below), then the feature list + phone mockup, gap-16
+   below that. */
+.case-study-solution {
+  gap: var(--space-3);
+}
+
+.case-study-solution .case-study-section-intro {
+  gap: var(--space-1);
+}
+
+/* Figma node 432:22713 is desktop-only: feature list (436px) + mockup
+   (369px) side by side, gap-20, both given flex-grow weights matching
+   that 436:369 ratio (rather than a literal px/% width) so the pair
+   fills the section's actual fluid width instead of sitting at a fixed
+   825px like a non-growing image, consistent with how every other
+   section's content scales here - see the desktop media query below.
+   Mobile-first stacks the feature list above the mockup instead, same
+   pattern as the rest of the page. */
+.solution-body {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--space-3);
+  width: 100%;
+}
+
+.solution-feature-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  width: 100%;
+  min-width: 0;
+}
+
+/* UserJourneyCard-height / this feature list: Figma's cards are a fixed
+   160px tall (was 200px) at the desktop width the design was drawn at
+   (see the desktop media query below) - still over their own text
+   content's natural height (hug) at 28px-title/16px-body sizes,
+   centered vertically to fill that. On narrower mobile/tablet widths
+   the same copy wraps onto more lines than 160px fits, so height stays
+   auto (min-height only) there to avoid the card's own text
+   overflowing into the next card. */
+.solution-feature {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 10px;
+  min-height: 160px;
+  padding: 24px 40px;
+  border-radius: 20px;
+  background: #f5f5f5;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+  box-sizing: border-box;
+  font: inherit;
+  color: inherit;
+}
+
+/* Not in Figma (every card there is the same neutral grey) - the active
+   card gets the page's green accent fill so it's clear which feature's
+   video is currently playing. */
+.solution-feature-active {
+  background: var(--color-bioscent-green);
+}
+
+.solution-feature-active .solution-feature-title,
+.solution-feature-active .solution-feature-description {
+  color: var(--color-bioscent-beige);
+}
+
+.solution-feature-title {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-weight: var(--font-weight-h5);
+  font-size: var(--text-h5-size);
+  line-height: var(--text-h5-line-height);
+  color: var(--color-black);
+}
+
+.solution-feature-description {
+  margin: 0;
+  font-family: var(--font-body);
+  font-weight: var(--font-weight-body);
+  font-size: var(--text-body-sm-size);
+  line-height: var(--text-body-sm-line-height);
+  color: var(--color-black);
+}
+
+.solution-mockup {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  width: 100%;
+  min-width: 0;
+}
+
+/* Figma's own placeholder (node 432:22727) is just a flat 369x632 grey
+   box with no device chrome - this draws a real iPhone-style mockup
+   instead. The frame keeps a fixed ~9:19.5 phone aspect ratio
+   regardless of the source footage's own shape (558x~1255); the video
+   inside crops via object-fit: cover rather than dictating the
+   frame's proportions, so the frame and the recording scale
+   independently of each other.
+
+   The bezel is a literal, equal px value on all 4 sides (not
+   percentage padding) - CSS always resolves percentage padding against
+   the containing block's WIDTH, on every side, which is what made the
+   old top/bottom bezel come out a different thickness than the sides.
+   The inner screen no longer adds its own extra left/right padding on
+   top of that (the old source of the uneven/thick side borders) - its
+   radius is simply the frame's outer radius minus the bezel, so the
+   two stay concentric at any size. */
+.solution-phone {
+  position: relative;
+  width: 100%;
+  max-width: 340px;
+  aspect-ratio: 9 / 19.5;
+  background: var(--color-bioscent-forest);
+  border: 2px solid rgba(255, 255, 255, 0.08);
+  border-radius: 54px;
+  padding: 14px;
+  box-sizing: border-box;
+  box-shadow: 0 20px 40px -20px rgba(50, 50, 36, 0.4);
+}
+
+/* Percentage width with a px cap (not a fixed px size) so the island
+   scales down with the frame on narrow screens instead of looking
+   oversized against a shrunk phone - the aspect-ratio keeps it a
+   fixed pill shape at any width instead of stretching. */
+.solution-phone-notch {
+  position: absolute;
+  top: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 28%;
+  max-width: 100px;
+  aspect-ratio: 100 / 28;
+  background: var(--color-bioscent-forest);
+  border-radius: 999px;
+  z-index: 1;
+}
+
+.solution-phone-screen {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  border-radius: 40px; /* outer 54px radius minus the 14px bezel, concentric */
+  overflow: hidden;
+  background: var(--color-bioscent-forest);
+}
+
+.solution-phone-video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  background: var(--color-black);
+}
+
+/* "Limitation" (Figma node 571:1275/571:1276): tag+heading intro then
+   a row of 3 equal fixed-width (268px) cards, gap-[20px] between them
+   (literal, not on scale), left-aligned title + description text.
+   items-center on the row so cards of slightly different content
+   height still sit vertically centered. Figma's own layout is
+   desktop-only (a fixed 1161px canvas) - mobile-first stacks the 3
+   cards in a column instead, same pattern as the assumptions list
+   above. */
+.case-study-limitation {
+  gap: 20px;
+}
+
+.case-study-limitation-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.case-study-limitation-item {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 10px; /* Figma literal, not on the base spacing scale */
+  flex: 1 1 0%;
+  min-width: 0;
+  width: 100%;
+  background: var(--color-grey-bg);
+  border-radius: var(--radius-card);
+  padding: 40px 20px;
+  box-sizing: border-box;
+}
+
+.case-study-limitation-item-title {
+  width: 100%;
+  margin: 0;
+  font-family: var(--font-heading);
+  font-weight: var(--font-weight-h5);
+  font-size: var(--text-h5-size);
+  line-height: var(--text-h5-line-height);
+  color: var(--color-black);
+  font-optical-sizing: var(--font-optical-sizing-heading);
+  font-variation-settings: var(--font-variation-heading);
+}
+
+.case-study-limitation-item-description {
+  width: 100%;
+  margin: 0;
+  font-family: var(--font-body);
+  font-weight: var(--font-weight-body);
+  font-size: var(--text-body-sm-size);
+  line-height: var(--text-body-sm-line-height);
+  color: var(--color-black);
+}
+
+/* "Reflection" (Figma node 432:22746/432:22747): tag+heading intro,
+   then 3 text columns (What I learned / Challenges / Next steps), then
+   a photo collage - one wide image plus a row of 3 equal portrait
+   images - gap-[40px] between the three blocks. Figma's column row is
+   desktop-only (near-equal 253:253:240px widths at a fixed 825px
+   canvas) - mobile-first stacks the 3 columns instead, same pattern as
+   the assumptions list above. */
+.case-study-reflection {
+  gap: var(--space-6);
+}
+
+.case-study-reflection-columns {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.case-study-reflection-column {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.case-study-reflection-column-title {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-weight: var(--font-weight-h5);
+  font-size: var(--text-h5-size);
+  line-height: var(--text-h5-line-height);
+  color: var(--color-black);
+  font-optical-sizing: var(--font-optical-sizing-heading);
+  font-variation-settings: var(--font-variation-heading);
+}
+
+/* line-height 1.3 (Figma's "PARA/Body large" style) - distinct from
+   the body-sm token's "normal" used elsewhere on this page. */
+.case-study-reflection-column-description {
+  margin: 0;
+  font-family: var(--font-body);
+  font-weight: var(--font-weight-body);
+  font-size: var(--text-body-sm-size);
+  line-height: 1.3;
+  color: var(--color-black);
+}
+
+.case-study-reflection-collage {
+  display: flex;
+  flex-direction: column;
+  gap: 9.4px; /* Figma literal, not on the base spacing scale */
+  width: 100%;
+}
+
+/* Wrapper for each collage photo - hosts the cursor-following caption
+   pop-up (.case-study-reflection-collage-caption below), so sizing that
+   used to live on the <img> itself now lives here instead; the <img>
+   just fills it (see .case-study-reflection-collage-photo). */
+.case-study-reflection-collage-item {
+  position: relative;
+  overflow: hidden;
+  cursor: default;
+}
+
+.case-study-reflection-collage-photo {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Figma's own asset is 817.052 x 471.42 (~1.73:1). */
+.case-study-reflection-collage-wide {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 817 / 471;
+  border-radius: var(--radius-sm);
+}
+
+.case-study-reflection-collage-row {
+  display: flex;
+  gap: 9.4px; /* Figma literal, matches the collage gap above */
+  width: 100%;
+}
+
+/* Figma's own row is a fixed 300.193px tall at the 816.734px-wide
+   desktop canvas (~266:300 per tile) - kept as an aspect-ratio instead
+   so it scales on narrower screens rather than cropping harder. */
+.case-study-reflection-collage-portrait {
+  flex: 1 1 0%;
+  min-width: 0;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 266 / 300;
+  border-radius: 11.75px; /* Figma literal, not on the base scale */
+}
+
+/* Cursor-following hover caption (this file's own addition, not in
+   Figma) - position tracks the mouse via inline left/top (set in
+   BioScent.jsx), the transform just offsets the label up-and-right of
+   the cursor tip so it doesn't sit under it. pointer-events: none so it
+   never blocks the mousemove it's reacting to.
+   Always mounted (visibility toggled via .is-visible) rather than
+   conditionally rendered, so opacity/transform are plain transitions -
+   that gives a symmetric fade in on hover AND fade out on un-hover,
+   instead of a one-shot mount animation that only played going in and
+   vanished instantly going out. */
+.case-study-reflection-collage-caption {
+  position: absolute;
+  top: 0;
+  left: 0;
+  max-width: min(220px, 80%);
+  padding: 8px 14px;
+  background: rgba(23, 23, 20, 0.92);
+  border-radius: 4px;
+  color: var(--color-white);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  line-height: 1.4;
+  pointer-events: none;
+  z-index: 2;
+  opacity: 0;
+  transform: translate(16px, -120%) scale(0.96);
+  transition: opacity 0.28s cubic-bezier(0.16, 1, 0.3, 1), transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.case-study-reflection-collage-caption.is-visible {
+  opacity: 1;
+  transform: translate(16px, -130%) scale(1);
+}
+
+/* "Thank You" (Figma node 432:22762/432:22763): eyebrow line, then a
+   filled card (title + description) - tightened from gap-[40px] to
+   gap-[16px] in the latest Figma edit. */
+.case-study-thank-you {
+  gap: var(--space-3);
+}
+
+/* Eyebrow ("If you got this far,") downsized from PARA/Body large
+   (24px/1.3) to PARA/Body reg (20px/1.2) in the latest Figma edit -
+   same combo as .case-study-subtitle. */
+.case-study-thank-you-eyebrow {
+  margin: 0;
+  font-family: var(--font-body);
+  font-weight: var(--font-weight-body);
+  font-size: var(--text-body-md-size);
+  line-height: var(--text-body-md-line-height);
+  color: var(--color-black);
+}
+
+.case-study-thank-you-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  width: 100%;
+  background: var(--color-bioscent-green-light);
+  border-radius: var(--radius-card);
+  padding: var(--space-6);
+}
+
+.case-study-thank-you-title {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-weight: var(--font-weight-h2);
+  font-size: var(--text-h2-size);
+  line-height: var(--text-h2-line-height);
+  color: var(--color-black);
+  font-optical-sizing: var(--font-optical-sizing-heading);
+  font-variation-settings: var(--font-variation-heading);
+}
+
+.case-study-thank-you-description {
+  margin: 0;
+  font-family: var(--font-body);
+  font-weight: var(--font-weight-body);
+  font-size: var(--text-body-md-size);
+  line-height: var(--text-body-md-line-height);
+  color: var(--color-black);
+}
+
+/* ---------- Tablet (640px - 1024px) ---------- */
+
+@media (min-width: 640px) {
+  .case-study-section {
+    padding: var(--space-5);
+  }
+}
+
+/* ---------- Desktop (1025px+) ---------- */
+
+@media (min-width: 1025px) {
+  .case-study {
+    flex-direction: row;
+    align-items: stretch;
+  }
+
+  .case-study-main {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .case-study-section {
+    padding: var(--space-7) 168px;
+  }
+
+  /* "Initial Assumptions", "Problem", "Inspiration", "Research
+     Insights", "How Might We", "Ecosystem", "Limitation" and "Thank
+     You" (Figma nodes 432:22584/432:22579/524:2936/432:22597/
+     432:22610/524:2928/571:1275/432:22762) all tightened to py-[40px],
+     unlike the rest of the page which stays at the standard 80px
+     vertical inset above. */
+  .case-study-assumptions,
+  .case-study-problem,
+  .case-study-inspiration,
+  .case-study-research,
+  .case-study-how-might-we,
+  .case-study-ecosystem,
+  .case-study-limitation,
+  .case-study-thank-you {
+    padding-top: var(--space-6);
+    padding-bottom: var(--space-6);
+  }
+
+  /* Hero (Figma node 432:22558) is asymmetric: pt-[80px] pb-[40px],
+     keeping the standard 80px top inset but tightening the bottom. */
+  .case-study-hero {
+    padding-bottom: var(--space-6);
+  }
+
+  /* Node 526:3231 ("Fill container"): the two columns' row gap is a
+     literal 45px, distinct from the base 40px used in the stacked
+     mobile/tablet layout above. */
+  .case-study-meta {
+    flex-direction: row;
+    gap: 45px;
+  }
+
+  .case-study-assumptions-list {
+    flex-direction: row;
+  }
+
+  /* Figma node 524:3218/3219/3223 now set to "Fill container" (flex-[1_0_0])
+     instead of a fixed width - the three cards split the row evenly. */
+  .case-study-assumptions-item {
+    flex: 1 0 0%;
+    min-width: 0;
+  }
+
+  .case-study-research-content {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+
+  /* flex-basis 351px capped at max-width (not a hard fixed width) and
+     min-width:0 so the card still shrinks instead of overflowing on
+     desktop windows narrower than the ~1461px (280px sidebar + 168px*2
+     padding + 825px design content) this section was actually drawn
+     at - the 1025px breakpoint above starts well before that. */
+  .case-study-research-card {
+    flex: 0 1 351px;
+    width: auto;
+    max-width: 351px;
+    min-width: 0;
+  }
+
+  /* align-items: stretch (not center): with the cards' shrinkable
+     max-width above, each card's own text wraps by a different amount
+     as the row narrows, so center-aligning let them drift to visibly
+     different heights depending on viewport width. Stretching keeps
+     all 3 the same height (the tallest card's) at any width - their
+     own content then centers vertically within that shared height via
+     .case-study-limitation-item's justify-content: center below. */
+  .case-study-limitation-list {
+    flex-direction: row;
+    align-items: stretch;
+  }
+
+  /* Same reasoning as .case-study-research-card above: flex-basis/max-
+     width instead of a hard fixed width, so the 3 cards shrink together
+     (rather than overflowing past the viewport) on desktop windows
+     narrower than the full design width. */
+  .case-study-limitation-item {
+    flex: 1 1 0%;
+    max-width: 268px;
+    min-width: 0;
+  }
+
+  .solution-body {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+
+  .solution-feature-list {
+    flex: 461 1 0%;
+  }
+
+  /* min-height, not a hard height: at desktop windows narrower than
+     the full design width the feature list gets squeezed enough that
+     its copy can wrap onto more lines than 160px fits - same overflow
+     risk as the two fixed-width cards above, just on the vertical
+     axis instead of horizontal. */
+  .solution-feature {
+    min-height: 160px;
+  }
+
+  .solution-mockup {
+    flex: 340 1 0%;
+  }
+
+  .case-study-reflection-columns {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+
+  /* Figma's 3 columns are near-equal (253:253:240px) - flattened to an
+     even 3-way split here via "fill container" (flex: 1 0 0%, no
+     max-width), same pattern as .case-study-assumptions-item above.
+     No max-width here (unlike the limitation/research cards, which
+     stand alone in their section): this row shares its section with
+     the photo collage below, which is a plain width:100% of the same
+     .case-study-section padding box, so capping only this row at a
+     literal 253px would pin it well short of the collage's width on
+     any viewport wider than Figma's fixed 1161px desktop frame -
+     boxing the text in while the photos sprawl to the fuller width
+     and breaking the shared left/right edges Figma's single frame
+     guarantees. */
+  .case-study-reflection-column {
+    flex: 1 0 0%;
+    min-width: 0;
+  }
+}

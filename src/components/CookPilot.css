@@ -1,0 +1,851 @@
+/* CookPilot case study. Shared case-study layout classes (.case-study,
+   .case-study-section, .case-study-hero, .case-study-hero-banner*,
+   .case-study-hero-info, .case-study-title, .case-study-subtitle,
+   .case-study-meta*, .case-study-tag) come from BioScent.css, which
+   defines them generically for reuse across case studies - see the
+   comment on .case-study-tag there. Only the pieces that differ per
+   project (CookPilot's dark-orange/orange fills, vs BioScent's green)
+   are overridden here. */
+.case-study-meta-cookpilot {
+  background: var(--color-cookpilot-dark-orange);
+}
+
+/* "Hackathon Theme" (Figma node 589:1956): tag + a 3-line quote, gap-
+   [16px] between them - re-verified against the latest Figma version:
+   plain text throughout now, no more bold/dark-orange phrase
+   highlights (an even earlier version had a filled dark-orange card
+   with beige text). */
+.case-study-tag-cookpilot {
+  background: var(--color-cookpilot-orange);
+}
+
+.case-study-theme {
+  gap: var(--space-3);
+}
+
+/* H5 style (28px/Regular serif), same combo as .case-study-hmw-question -
+   three separate lines (one per Figma <p>, mb-0 so they stack with no
+   extra gap beyond their own line-height). */
+.case-study-theme-quote {
+  width: 100%;
+  font-family: var(--font-heading);
+  font-weight: var(--font-weight-h5);
+  font-size: var(--text-h5-size);
+  line-height: var(--text-h5-line-height);
+  color: var(--color-black);
+  font-optical-sizing: var(--font-optical-sizing-heading);
+  font-variation-settings: var(--font-variation-heading);
+}
+
+.case-study-theme-quote p {
+  margin: 0;
+}
+
+@media (min-width: 1025px) {
+  /* Figma node 573:1995: py-[40px], tightened from the section default
+     80px - same treatment BioScent.css gives .case-study-how-might-we
+     and its sibling sections. */
+  .case-study-theme {
+    padding-top: var(--space-6);
+    padding-bottom: var(--space-6);
+  }
+}
+
+/* "Problem & Pain Point" (Figma node 573:2000): heading+description
+   block, then a photo, then the Pain Points list - gap-[40px] between
+   the three. .case-study-problem itself already gets the shared
+   py-[40px] tightened-padding treatment from the media-query list in
+   BioScent.css; the gap/align-items added here are additive and don't
+   affect BioScent's own "Problem" section (its only child is already
+   full-width, so a column gap and centered cross-axis alignment on a
+   single item are no-ops there). */
+.case-study-problem {
+  gap: var(--space-6);
+  align-items: center;
+}
+
+.case-study-statement-intro {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-3);
+  width: 100%;
+}
+
+/* Node 573:2003: heading + description, gap-[8px] - tighter than the
+   16px above between the tag and this pair. */
+.case-study-statement-heading-group {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-1);
+}
+
+/* H5 style (28px/Regular) - same combo as .case-study-section-heading,
+   used here for the "hardest part of cooking" and "existing solution"
+   statements. */
+.case-study-statement-heading {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-weight: var(--font-weight-h5);
+  font-size: var(--text-h5-size);
+  line-height: var(--text-h5-line-height);
+  color: var(--color-black);
+  font-optical-sizing: var(--font-optical-sizing-heading);
+  font-variation-settings: var(--font-variation-heading);
+}
+
+/* PARA/Body style (16px) - re-verified against the latest Figma
+   version, which dropped this from 20px (PARA/Body reg, matching
+   .case-study-subtitle) to 16px - now the same size as Existing
+   Solution's own description (.case-study-statement-description-sm). */
+.case-study-statement-description {
+  margin: 0;
+  font-family: var(--font-body);
+  font-weight: var(--font-weight-body);
+  font-size: var(--text-body-sm-size);
+  line-height: var(--text-body-sm-line-height);
+  color: var(--color-black);
+}
+
+/* "Meet Tommy" intro video (Figma node 573:2006 was a video fill with
+   no visible padding around it despite the frame's own p-[40px]).
+   Aspect ratio is the frame's own 825:453, not the source video's
+   16:9. object-fit: contain (not cover) so the whole frame - including
+   the burned-in subtitle captions near the top/bottom edges - stays
+   visible with no cropping; the black fill shows as slim letterbox
+   bars on the sides instead. First 45s of the uploaded intro clip,
+   trimmed/compressed, audio kept for the sound toggle below. */
+.case-study-problem-photo {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 825 / 453;
+  background: var(--color-black);
+  border-radius: var(--radius-card);
+  overflow: hidden;
+}
+
+.case-study-problem-photo-image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+@media (min-width: 1025px) {
+  .case-study-problem-photo {
+    height: 453px;
+    aspect-ratio: auto;
+  }
+}
+
+/* Click-to-unmute control, this file's own addition (not in Figma) -
+   autoplaying video can't start with sound, so a muted clip needs an
+   explicit affordance to turn it on. */
+.case-study-problem-sound-toggle {
+  position: absolute;
+  right: var(--space-3);
+  bottom: var(--space-3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.6);
+  color: var(--color-white);
+  cursor: pointer;
+}
+
+.case-study-problem-sound-toggle svg {
+  width: 20px;
+  height: 20px;
+}
+
+.case-study-problem-sound-toggle:hover {
+  background: rgba(0, 0, 0, 0.8);
+}
+
+/* "Pain Points" cards (Figma nodes 589:1974/589:1976/589:1978): gap-8,
+   rounded-20, px-[20px] py-[40px] (20px horizontal - not on the base
+   scale, and different from Future Improvements' 16px, kept literal),
+   alternating --color-grey-bg/--color-sidebar-bg fills. Own class
+   (not .case-study-assumptions-item) because that class adds a numbered
+   "1. "-style counter prefix via ::before, which BioScent's own
+   "Initial Assumptions" cards want but these plain (unnumbered) Pain
+   Points cards don't. flex:1 fill (fluid), same convention as Future
+   Improvements/Limitation, rather than Figma's literal fixed 256px. */
+.case-study-pain-points-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.case-study-pain-points-item {
+  flex: 1 1 0%;
+  min-width: 0;
+  background: var(--color-grey-bg);
+  border-radius: var(--radius-card);
+  padding: var(--space-6) 20px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  font-family: var(--font-body);
+  font-weight: var(--font-weight-body);
+  font-size: var(--text-body-sm-size);
+  line-height: var(--text-body-sm-line-height);
+  color: var(--color-black);
+}
+
+.case-study-pain-points-item-alt {
+  background: var(--color-sidebar-bg);
+}
+
+@media (min-width: 1025px) {
+  .case-study-pain-points-list {
+    flex-direction: row;
+  }
+}
+
+/* Same body-sm (16px) size as .case-study-statement-description above,
+   just split across two <p> children (Figma's own paragraph + blank-
+   line + paragraph) instead of one - used by "Existing Solution"
+   (Figma node 573:2024). */
+.case-study-statement-description-sm {
+  margin: 0;
+  font-family: var(--font-body);
+  font-weight: var(--font-weight-body);
+  font-size: var(--text-body-sm-size);
+  line-height: var(--text-body-sm-line-height);
+  color: var(--color-black);
+}
+
+.case-study-statement-description-sm p {
+  margin: 0 0 var(--space-3) 0;
+}
+
+.case-study-statement-description-sm p:last-child {
+  margin-bottom: 0;
+}
+
+/* "Existing Solution" (Figma node 573:2019): statement block, then the
+   images+comparison media group - gap-[40px] between the two, same
+   shell as .case-study-problem above. */
+.case-study-existing-solution {
+  gap: var(--space-6);
+  align-items: center;
+}
+
+@media (min-width: 1025px) {
+  /* Figma node 573:2019: py-[40px], tightened from the section default
+     80px, same as every other section on this page. */
+  .case-study-existing-solution {
+    padding-top: var(--space-6);
+    padding-bottom: var(--space-6);
+  }
+}
+
+/* Images row + comparison row (Figma node 573:2029 > 574:3672, added in
+   a later spacing pass) - gap-[16px] between the two, tighter than the
+   40px above between this whole group and the statement block.
+   Left-aligned (not centered) within the content column. */
+.case-study-existing-solution-media {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-3);
+  width: 100%;
+}
+
+/* Two reference images (Figma node 589:1989/589:1991, 296x372 each,
+   rounded-[16.94px]) - the row is a fluid even split up to the row's
+   natural 605.552px width (matching Figma, not stretched to the full
+   825px content column), then centered via the max-width below. */
+.case-study-existing-solution-images {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  width: 100%;
+}
+
+.case-study-existing-solution-image {
+  position: relative;
+  flex: 1 1 0;
+  min-width: 0;
+  aspect-ratio: 296 / 372;
+  border-radius: 17px;
+  overflow: hidden;
+}
+
+.case-study-existing-solution-image img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Plain (unnumbered) 2-card comparison row (Figma node 573:2030) - same
+   fills/padding as .case-study-assumptions-item but without the
+   counter-based numbering, since Figma doesn't number these. */
+.case-study-comparison-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.case-study-comparison-item {
+  flex: 1 1 0;
+  min-width: 0;
+  background: var(--color-grey-bg);
+  border-radius: var(--radius-card);
+  padding: var(--space-6) var(--space-3);
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  font-family: var(--font-body);
+  font-weight: var(--font-weight-body);
+  font-size: var(--text-body-sm-size);
+  line-height: var(--text-body-sm-line-height);
+  color: var(--color-black);
+}
+
+.case-study-comparison-item-alt {
+  background: var(--color-sidebar-bg);
+}
+
+@media (min-width: 1025px) {
+  /* Figma node 589:1986 "Frame 402" sizes this whole media block to its
+     children's natural width (605px, the two 296px images + gap) rather
+     than stretching it across the full 825px content column - capped
+     and left-aligned here to match. */
+  .case-study-existing-solution-images,
+  .case-study-comparison-list {
+    flex-direction: row;
+    max-width: 605px;
+  }
+}
+
+/* "Solution" (Figma node 591:2170): the "Pre-cooking" carousel block.
+   During & Post-cooking was removed from Figma pending its own
+   redesign. */
+.case-study-solution {
+  gap: var(--space-6);
+  align-items: center;
+}
+
+@media (min-width: 1025px) {
+  /* Figma nodes 573:2035/589:2032/589:2038/589:2053/589:2068: py-[40px],
+     tightened from the section default 80px, same as every other
+     section on this page. */
+  .case-study-solution,
+  .case-study-tech-stack,
+  .case-study-future-improvements,
+  .case-study-cookpilot-reflection,
+  .case-study-cookpilot-thank-you {
+    padding-top: var(--space-6);
+    padding-bottom: var(--space-6);
+  }
+}
+
+/* Shared outer shell for both solution carousels - "Before cooking"
+   (Figma node 604:2610/604:2611) and "During cooking" (603:2466/
+   603:2467): tag+heading block, then .case-study-solution-controls
+   (nav + sliding step), then the dots - gap-[40px] between each. */
+.case-study-solution-block {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-6);
+  width: 100%;
+}
+
+.case-study-solution-block-intro {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-3);
+}
+
+.case-study-solution-description {
+  font-family: var(--font-body);
+  font-weight: var(--font-weight-body);
+  font-size: var(--text-body-sm-size);
+  line-height: var(--text-body-sm-line-height);
+  color: var(--color-black);
+}
+
+.case-study-solution-description p {
+  margin: 0 0 var(--space-3) 0;
+}
+
+.case-study-solution-description p:last-child {
+  margin-bottom: 0;
+}
+
+.case-study-solution-nav {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+/* Figma node 591:2177/591:2178, size-[41.184px] rounded-[40px]. */
+.case-study-solution-nav-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 41px;
+  height: 41px;
+  padding: 0;
+  border: none;
+  border-radius: 40px;
+  background: var(--color-cookpilot-dark-orange);
+  color: var(--color-white);
+  cursor: pointer;
+}
+
+.case-study-solution-nav-button:hover {
+  opacity: 0.85;
+}
+
+.case-study-solution-nav-button svg {
+  width: 24px;
+  height: 24px;
+}
+
+/* Reference photo filling .case-study-solution-media-frame below (Figma
+   node 604:2628 etc: the photo covers the frame edge-to-edge, radius
+   comes from the frame's own overflow:hidden so no radius needed here). */
+.case-study-solution-steps-photo {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Step dots, same shape/behavior as .case-study-research-dot in
+   BioScent.css but in CookPilot's own dark-orange accent. */
+.case-study-solution-dots {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: var(--space-1);
+  width: 100%;
+}
+
+.case-study-solution-dot {
+  width: 8px;
+  height: 8px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: var(--color-cookpilot-dark-orange);
+  opacity: 0.35;
+  cursor: pointer;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.case-study-solution-dot:hover {
+  opacity: 0.6;
+}
+
+.case-study-solution-dot-active {
+  opacity: 1;
+  transform: scale(1.25);
+}
+
+/* Shared carousel shell for both "Before cooking" and "During cooking"
+   (Figma node 589:1939 - confirmed against the full page export, which
+   shows both sections using the exact same structure: tag+heading as
+   their own block, then this wrapper holding nav+step together). The
+   nav row is NOT grouped with the tag+heading - Figma nests it as the
+   first child of its own wrapper alongside the step content (gap-[16px]
+   between nav and step, a separate gap-[40px] below the tag+heading
+   block above it), so the buttons read as controls for the step display
+   rather than a header decoration. */
+.case-study-solution-controls {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-3);
+  width: 100%;
+}
+
+/* Single sliding step (Figma nodes 604:2621/603:2476 for During Cooking,
+   604:2621 for Before Cooking - same shape): title+description above
+   the media, re-keyed per step index in CookPilot.jsx so the slide
+   animation restarts on every step change, reusing BioScent's
+   research-insight keyframes rather than duplicating them. Replaces the
+   old side-by-side .case-study-solution-steps-row layout Pre-cooking
+   used to have (media left, info right) - both carousels now stack the
+   same way at every width, matching Figma. */
+.case-study-solution-step {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-3);
+  width: 100%;
+  animation: case-study-research-slide-in-right 0.4s ease;
+}
+
+.case-study-solution-step[data-direction='-1'] {
+  animation-name: case-study-research-slide-in-left;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .case-study-solution-step {
+    animation: none;
+  }
+}
+
+/* Figma nodes 604:2522/604:2498/604:2533/604:2547 (During Cooking) and
+   604:2626 (Before Cooking): padded grey card (--color-sidebar-bg is
+   Figma's own rgba(245,245,245,0.7), not just a same-looking value)
+   wrapping the media, p-[22px] rounded-[20px]. */
+.case-study-solution-media-card {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  background: var(--color-sidebar-bg);
+  border-radius: var(--radius-card);
+  padding: 22px;
+  box-sizing: border-box;
+}
+
+/* Inner media frame (Figma nodes 604:2526/604:2500/604:2509/604:2513 for
+   During Cooking, 604:2628 for Before Cooking): 781:449 (~1.74:1),
+   rounded-[16px] (~15.4-16.8px per step, flattened to one literal).
+   Reused as-is by both carousels - During Cooking's <video> children use
+   object-fit: contain (see .case-study-during-cooking-video-image
+   below), Before Cooking's <img> children use object-fit: cover
+   (.case-study-solution-steps-photo) since Figma's own reference photos
+   fill the frame edge-to-edge with no captions at risk of cropping. */
+.case-study-solution-media-frame {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 781 / 449;
+  background: var(--color-black);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+
+/* object-fit: contain (not cover), same reasoning as
+   .case-study-problem-photo-image above: each of the 5 source clips has
+   its own burned-in captions right at the top/bottom edges, so cropping
+   to fill would cut them off - the black backdrop on
+   .case-study-solution-media-frame shows as slim letterbox bars
+   instead, sized per clip's own aspect ratio (Step 5's source is
+   portrait, not 16:9, so its bars are much wider). Toggle mirrors
+   .case-study-problem-photo/-sound-toggle exactly, kept as its own rule
+   set (rather than shared) so this section doesn't reach back into the
+   Problem section's styles. */
+.case-study-during-cooking-video-image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.case-study-during-cooking-voice-toggle {
+  position: absolute;
+  right: var(--space-3);
+  bottom: var(--space-3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.6);
+  color: var(--color-white);
+  cursor: pointer;
+}
+
+.case-study-during-cooking-voice-toggle svg {
+  width: 20px;
+  height: 20px;
+}
+
+.case-study-during-cooking-voice-toggle:hover {
+  background: rgba(0, 0, 0, 0.8);
+}
+
+/* "Tech Stack, AI, APIs" (Figma node 589:2032/589:2033): tag+heading
+   intro, then a single reference diagram - gap-[40px] between the two.
+   The intro's own tag-to-heading gap is gap-[8px], tighter than
+   .case-study-section-intro's shared 16px default, so it's overridden
+   here the same way BioScent.css overrides it for its own Solution
+   section. The diagram is a single flattened screenshot (an
+   architecture chart with its own baked-in text/boxes), so it's a
+   plain full-width image rather than rebuilt markup. */
+.case-study-tech-stack {
+  gap: var(--space-6);
+}
+
+.case-study-tech-stack .case-study-section-intro {
+  gap: var(--space-1);
+}
+
+.case-study-tech-stack-diagram {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* "Future Improvements" (Figma node 589:2038/589:2039): tag+heading+
+   description intro (gap-16 throughout, so the shared .case-study-
+   section-intro default already matches with no override needed), then
+   a row of 3 equal cards - gap-[40px] between the two blocks. Card list
+   is its own rule set rather than reusing .case-study-comparison-list
+   (visually identical: gap-8, flex-1, rounded-20, px-16/py-40,
+   alternating --color-grey-bg/--color-sidebar-bg fills) because that
+   class gets a max-width: 605px cap at desktop scoped for Existing
+   Solution's 2-item row - reusing it here would wrongly cap this
+   3-card row too. */
+.case-study-future-improvements {
+  gap: var(--space-6);
+}
+
+.case-study-future-improvements-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.case-study-future-improvements-item {
+  flex: 1 1 0%;
+  min-width: 0;
+  background: var(--color-grey-bg);
+  border-radius: var(--radius-card);
+  padding: var(--space-6) var(--space-3);
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  font-family: var(--font-body);
+  font-weight: var(--font-weight-body);
+  font-size: var(--text-body-sm-size);
+  line-height: var(--text-body-sm-line-height);
+  color: var(--color-black);
+}
+
+.case-study-future-improvements-item-alt {
+  background: var(--color-sidebar-bg);
+}
+
+@media (min-width: 1025px) {
+  .case-study-future-improvements-list {
+    flex-direction: row;
+  }
+}
+
+/* "Reflection" (Figma node 589:2053/589:2054): tag, then 2 text columns,
+   then a photo collage - gap-[40px] between the three. Own class prefix
+   (case-study-cookpilot-reflection-*, not case-study-reflection-*)
+   because BioScent.css already defines .case-study-reflection/-columns/
+   -collage* globally with different values (different image counts/
+   aspect ratios) - reusing those names here would collide. Tag is the
+   shared 32px .case-study-tag default - no override needed. */
+.case-study-cookpilot-reflection {
+  gap: var(--space-6);
+}
+
+.case-study-cookpilot-reflection-columns {
+  display: flex;
+  flex-direction: column;
+  gap: 20px; /* Figma literal, not on the base spacing scale */
+  width: 100%;
+}
+
+.case-study-cookpilot-reflection-column {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+/* line-height 1.3 (Figma's "PARA/Body large" style) - distinct from
+   the body-sm token's "normal" used elsewhere on this page. */
+.case-study-cookpilot-reflection-column-description {
+  margin: 0;
+  font-family: var(--font-body);
+  font-weight: var(--font-weight-body);
+  font-size: var(--text-body-sm-size);
+  line-height: 1.3;
+  color: var(--color-black);
+}
+
+.case-study-cookpilot-reflection-photos {
+  display: flex;
+  flex-direction: column;
+  gap: 16.8px; /* Figma literal, not on the base spacing scale */
+  width: 100%;
+}
+
+/* Wrapper for each collage photo - hosts the cursor-following caption
+   pop-up (.case-study-cookpilot-reflection-photo-caption below), so
+   sizing that used to live on the <img> itself now lives here instead;
+   the <img> just fills it (see .case-study-cookpilot-reflection-photo-img). */
+.case-study-cookpilot-reflection-photo-item {
+  position: relative;
+  overflow: hidden;
+  cursor: default;
+}
+
+.case-study-cookpilot-reflection-photo-img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Figma's own asset is 825 x 474.6 (~1.738:1). */
+.case-study-cookpilot-reflection-photo-wide {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 825 / 474.6;
+  border-radius: 16.8px;
+}
+
+.case-study-cookpilot-reflection-photo-row {
+  display: flex;
+  gap: 16.8px; /* Figma literal, matches the collage gap above */
+  width: 100%;
+}
+
+/* Figma's row is 2 unequal-width portraits (417.944:390, near-equal
+   height at 537.212/535 - the ~0.4% difference is imperceptible so each
+   image just keeps its own aspect-ratio rather than forcing a shared
+   row height) - flex-grow ratios matching those literal widths, same
+   technique BioScent uses for its own unequal-width rows. */
+.case-study-cookpilot-reflection-photo-portrait {
+  min-width: 0;
+  height: auto;
+  border-radius: 16.262px;
+}
+
+.case-study-cookpilot-reflection-photo-portrait:first-child {
+  flex: 417.944 1 0%;
+  aspect-ratio: 417.944 / 537.212;
+}
+
+.case-study-cookpilot-reflection-photo-portrait:last-child {
+  flex: 390 1 0%;
+  aspect-ratio: 390 / 535;
+}
+
+/* Cursor-following hover caption - same behavior/tuning as BioScent's own
+   .case-study-reflection-collage-caption, kept as its own rule set (own
+   cookpilot-prefixed classes) rather than shared, matching this file's
+   existing convention. Always mounted (visibility toggled via
+   .is-visible) so opacity/transform are plain transitions - a symmetric
+   fade in on hover and fade out on un-hover. */
+.case-study-cookpilot-reflection-photo-caption {
+  position: absolute;
+  top: 0;
+  left: 0;
+  max-width: min(220px, 80%);
+  padding: 8px 14px;
+  background: rgba(23, 23, 20, 0.92);
+  border-radius: 4px;
+  color: var(--color-white);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  line-height: 1.4;
+  pointer-events: none;
+  z-index: 2;
+  opacity: 0;
+  transform: translate(16px, -120%) scale(0.96);
+  transition: opacity 0.28s cubic-bezier(0.16, 1, 0.3, 1), transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.case-study-cookpilot-reflection-photo-caption.is-visible {
+  opacity: 1;
+  transform: translate(16px, -130%) scale(1);
+}
+
+@media (min-width: 1025px) {
+  .case-study-cookpilot-reflection-columns {
+    flex-direction: row;
+  }
+
+  .case-study-cookpilot-reflection-column-fixed {
+    flex: none;
+    width: 393px;
+  }
+
+  .case-study-cookpilot-reflection-column:not(.case-study-cookpilot-reflection-column-fixed) {
+    flex: 1 1 0%;
+    min-width: 0;
+  }
+}
+
+/* "Thank You" (Figma node 589:2067/589:2068): eyebrow line, then a
+   filled card (title + description) - tightened further to gap-[16px]
+   in the latest Figma edit (was 40px, then 20px). Own class prefix
+   (case-study-cookpilot-thank-you-*, not case-study-thank-you-*)
+   because BioScent.css already defines .case-study-thank-you* globally
+   with different colors (bioscent-green-light card, black text vs this
+   dark-orange card, white text) - reusing those names here would
+   collide. */
+.case-study-cookpilot-thank-you {
+  gap: var(--space-3);
+}
+
+/* PARA/Body reg (20px/1.2) - same combo as .case-study-subtitle, and
+   re-verified smaller than the original 24px/1.3 (PARA/Body large). */
+.case-study-cookpilot-thank-you-eyebrow {
+  margin: 0;
+  font-family: var(--font-body);
+  font-weight: var(--font-weight-body);
+  font-size: var(--text-body-md-size);
+  line-height: var(--text-body-md-line-height);
+  color: var(--color-black);
+}
+
+.case-study-cookpilot-thank-you-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  width: 100%;
+  background: var(--color-cookpilot-dark-orange);
+  border-radius: var(--radius-card);
+  padding: var(--space-6);
+  box-sizing: border-box;
+}
+
+.case-study-cookpilot-thank-you-title {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-weight: var(--font-weight-h2);
+  font-size: var(--text-h2-size);
+  line-height: var(--text-h2-line-height);
+  color: var(--color-white);
+  font-optical-sizing: var(--font-optical-sizing-heading);
+  font-variation-settings: var(--font-variation-heading);
+}
+
+.case-study-cookpilot-thank-you-description {
+  margin: 0;
+  font-family: var(--font-body);
+  font-weight: var(--font-weight-body);
+  font-size: var(--text-body-md-size);
+  line-height: var(--text-body-md-line-height);
+  color: var(--color-white);
+}

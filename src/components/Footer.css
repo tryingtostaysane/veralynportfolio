@@ -1,0 +1,159 @@
+.site-footer {
+  display: flex;
+  flex-direction: column;
+  gap: 20px; /* was --space-6 (40px); off the base scale, matches --space-work-card-padding's 20 coincidentally */
+  background: var(--color-main-gold);
+  /* Mobile-first, same tightening pattern as .work-grid/.case-study-section
+     (Home.css/BioScent.css) - the fixed --space-7 (80px) horizontal inset
+     below is a desktop-only value; at narrower widths it left so little
+     room for .site-footer-nav's 3 links + gaps that they overflowed the
+     viewport below ~325px (e.g. an iPhone 5/SE 1st-gen). */
+  padding: var(--space-4);
+}
+
+@media (min-width: 640px) {
+  .site-footer {
+    padding: var(--space-5) var(--space-6);
+  }
+}
+
+@media (min-width: 1025px) {
+  .site-footer {
+    padding: var(--space-6) var(--space-7);
+  }
+}
+
+/* CookPilot-only override - the rest of the site keeps the shared
+   mustard/gold fill above; only this page's footer uses CookPilot's
+   own dark-orange accent instead. Scoped via Footer.jsx's own
+   pathname check (it already reads useLocation for the nav links)
+   rather than a prop, so every other page's <Footer /> call is
+   untouched. */
+.site-footer-cookpilot {
+  background: var(--color-cookpilot-dark-orange);
+}
+
+/* Email glyph matches this same dark-orange on CookPilot (Figma's own
+   Footer instance for this page, node 438:26154) instead of the
+   site-wide gold below. */
+.site-footer-cookpilot .social-icon {
+  color: var(--color-cookpilot-dark-orange);
+}
+
+/* BioScent-only override, same pattern as CookPilot above - its own
+   Footer instance (node 623:2079, "Variant=Green") uses BioScent's
+   green accent instead of the shared gold. */
+.site-footer-bioscent {
+  background: var(--color-bioscent-green);
+}
+
+.site-footer-bioscent .social-icon {
+  color: var(--color-bioscent-green);
+}
+
+/* VisualEyes-only override, same pattern as CookPilot/BioScent above -
+   its own footer uses VisualEyes' dark-blue accent instead of the
+   shared gold. */
+.site-footer-visualeyes {
+  background: var(--color-visualeyes-dark-blue);
+}
+
+.site-footer-visualeyes .social-icon {
+  color: var(--color-visualeyes-dark-blue);
+}
+
+.site-footer-top {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-3);
+}
+
+.site-footer-socials {
+  display: flex;
+  gap: 5.6px; /* was --space-1 (8px); icons scaled to 70% of their prior size, gap scaled with them */
+}
+
+.social-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 33.6px;
+  height: 33.6px;
+  background: var(--color-white);
+  border-radius: 4px;
+  color: var(--color-main-gold);
+}
+
+.social-icon-glyph {
+  width: 16.8px;
+  height: auto;
+}
+
+/* LinkedIn (471:1204, latest edit): the icon is now a self-contained
+   white badge (its own rounded-square silhouette is baked into the
+   SVG), not a colored glyph that needs an external white box like
+   email still does. */
+.social-icon-plain {
+  display: flex;
+  width: 33.6px;
+  height: 33.6px;
+  color: inherit;
+}
+
+.social-icon-plain svg {
+  width: 100%;
+  height: 100%;
+}
+
+.site-footer-name {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-weight: var(--font-weight-h3);
+  font-size: var(--text-h3-size);
+  line-height: var(--text-h3-line-height);
+  color: var(--color-white);
+}
+
+.site-footer-nav {
+  display: flex;
+  flex-wrap: wrap;
+  row-gap: var(--space-2);
+  column-gap: var(--space-4);
+}
+
+@media (min-width: 640px) {
+  .site-footer-nav {
+    column-gap: var(--space-6);
+  }
+}
+
+.site-footer-nav a,
+.site-footer-nav .nav-link-pending {
+  padding: 0;
+  color: var(--color-white);
+  text-decoration: none;
+  font-family: var(--font-body);
+  font-size: var(--text-body-sm-size);
+  line-height: var(--text-body-sm-line-height);
+  text-transform: none;
+}
+
+.site-footer-nav a:hover {
+  text-decoration: underline;
+}
+
+.site-footer-divider {
+  width: 100%;
+  height: 0;
+  margin: 0;
+  border: none;
+  border-top: 0.5px solid var(--color-white);
+}
+
+.site-footer-copyright {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: var(--text-body-sm-size);
+  color: var(--color-white);
+}
