@@ -22,32 +22,21 @@ body {
   text-rendering: optimizeLegibility;
 }
 
-/* The morphing custom cursor (CustomCursor.jsx) replaces the system
-   pointer on mouse/trackpad devices only - (pointer: fine) leaves touch
-   devices completely untouched, where the component itself also
-   declines to render. Body copy and form fields opt back into the real
-   system cursor (see CustomCursor.jsx's TEXT_SELECTOR) so selecting text
-   still gets a normal I-beam instead of the decorative dot. */
-@media (pointer: fine) {
-  html,
-  body,
-  a {
-    /* Browsers apply their own `cursor: pointer` to links regardless of
-       the inherited value above, which is specific enough to beat plain
-       inheritance from html/body - so anchors need the override spelled
-       out here too, or hovering a link shows both the system hand and
-       our dot/pill at once. */
-    cursor: none;
-  }
-
-  .bio,
-  input,
-  textarea,
-  [contenteditable] {
-    cursor: text;
-  }
-}
-
 #root {
   min-height: 100vh;
+}
+
+/* Home -> case-study page transitions (react-router's <Link
+   viewTransition>, see Home.jsx) - a subtle ease between the two pages
+   on click, not a shared-element morph. The browser's default cross-fade
+   already handles the old page fading out and the new one fading in;
+   this just slows that down slightly and eases it (same cubic-bezier as
+   the hover-caption fades in BioScent.css etc.) so it reads as a
+   deliberate, gentle transition rather than the default's snappy 0.25s
+   blink. Unsupported browsers (Firefox, as of this writing) just
+   navigate instantly - this rule simply never applies there. */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 320ms;
+  animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
 }

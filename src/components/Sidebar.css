@@ -1,0 +1,390 @@
+/* .sidebar is the beige box itself - at desktop it's stretched
+   (align-items: stretch on .home/.case-study) to the full row height so
+   the fill always reaches the footer. Its content lives in .sidebar-inner
+   instead of directly on .sidebar: a sticky element only has room to move
+   within its own box, and .sidebar's box already spans the entire page
+   once stretched, so sticky-ing .sidebar itself was a no-op - the content
+   just scrolled away with the page. .sidebar-inner stays hugging its own
+   content height, so sticky positioning it (see desktop breakpoint below)
+   actually has scroll range to work with. */
+.sidebar {
+  background: var(--color-main-beige);
+  border-radius: var(--radius-xs);
+  color: var(--color-text-muted);
+}
+
+/* Figma (471:1204) stacks [intro, divider, nav] as one flat flex column
+   with a uniform 40px gap throughout - not two groups pushed apart to
+   fill the viewport. "Let's chat!" lives inside the nav pill as its
+   4th row, not as a separate contact block. */
+.sidebar-inner {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sidebar-inner-gap);
+  padding: var(--space-5) var(--space-4);
+}
+
+.intro {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sidebar-intro-gap);
+}
+
+.intro-heading,
+.role-bio {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.sidebar-divider {
+  width: 100%;
+  height: 1px;
+  border: none;
+  margin: 0;
+  background: var(--color-divider-muted);
+}
+
+/* Pin the variable font's optical-size axis to match Figma's "36pt" cut
+   (see --font-variation-heading in tokens) instead of the browser's default.
+   Shared with .site-footer-name and .work-card-title (see Footer.css /
+   Home.css) - all three use the same H3 heading style. */
+.name,
+.site-footer-name,
+.work-card-title {
+  font-optical-sizing: var(--font-optical-sizing-heading);
+  font-variation-settings: var(--font-variation-heading);
+}
+
+.name {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-weight: var(--font-weight-h3);
+  font-size: var(--text-h3-size);
+  line-height: var(--text-h3-line-height);
+  color: var(--color-text-muted);
+}
+
+.location {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: var(--text-body-sm-size);
+  line-height: var(--text-body-sm-line-height);
+  text-transform: uppercase;
+}
+
+.location-icon {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+.role {
+  margin: 0;
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: var(--text-body-sm-size);
+  line-height: var(--text-body-sm-line-height);
+  text-transform: uppercase;
+  /* Preserves the literal repeated spaces around "|" (matching Figma's
+     own whitespace-pre-wrap technique) while still wrapping normally -
+     unlike &nbsp;&nbsp;, a wrap point doesn't strand spaces at the start
+     of the next line as visible indentation. */
+  white-space: pre-wrap;
+}
+
+.bio {
+  margin: 0;
+  font-family: var(--font-body);
+  font-weight: var(--font-weight-body);
+  font-size: var(--text-body-sm-size);
+  line-height: var(--text-body-sm-line-height);
+}
+
+.nav-links {
+  display: flex;
+  flex-direction: column;
+  background: var(--color-nav-pill-bg);
+  border-radius: var(--radius-card);
+  padding: var(--space-3) 0; /* outer 16px vertical padding wrapping all rows, added as of the latest menu edit */
+  overflow: hidden;
+  animation: nav-pill-float 4s ease-in-out infinite;
+}
+
+@keyframes nav-pill-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-4px);
+  }
+}
+
+/* Direct children only (not `.nav-links a`) - the nav-link-chat-icon
+   anchors below are also <a> tags but nested two levels deeper inside
+   .nav-link-chat, and must NOT inherit this row padding: it's wider than
+   their own 36px circle, and a flex item's automatic min-width (based on
+   its padded content) was stretching the circle to fit that padding and
+   squeezing the icon's SVG down to 0 width. */
+.nav-links > a,
+.nav-link-pending {
+  display: flex;
+  align-items: center;
+  padding: var(--space-2) var(--space-work-card-padding); /* was --space-3 (16px) vertical; tightened to --space-2 (12px) now that the pill itself carries its own vertical padding */
+  color: inherit;
+  text-decoration: none;
+  font-family: var(--font-body);
+  font-weight: 700; /* was regular; nav items are bold as of the latest menu edit */
+  font-size: var(--text-body-sm-size);
+  line-height: var(--text-body-sm-line-height);
+}
+
+/* Underline draws in left-to-right on hover instead of appearing all at
+   once (a plain text-decoration:underline has no way to animate its
+   reveal direction, hence the pseudo-element + scaleX approach). */
+.nav-link-text {
+  position: relative;
+}
+
+.nav-link-text::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -3px;
+  width: 100%;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 300ms ease-out;
+}
+
+.nav-links > a:hover .nav-link-text::after,
+.nav-link-chat:hover .nav-link-text::after {
+  transform: scaleX(1);
+}
+
+.nav-link-pending {
+  cursor: default;
+}
+
+/* "Let's chat!" used to be a single mailto link; it now has two real
+   destinations (Email, LinkedIn), so it's a row of text with a collapsed
+   options row beneath it instead of a link itself - hovering the row
+   expands that options row into view. Same max-height/opacity reveal
+   approach as .work-card-reveal (Home.css), so the two hover interactions
+   read as one consistent motion language across the site. */
+.nav-link-chat {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: var(--space-2) var(--space-work-card-padding);
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: var(--text-body-sm-size);
+  line-height: var(--text-body-sm-line-height);
+  color: inherit;
+}
+
+.nav-link-chat-options {
+  display: flex;
+  gap: var(--space-2);
+  max-height: 0;
+  margin-top: 0;
+  opacity: 0;
+  overflow: hidden;
+  transition: max-height 300ms ease-out, margin-top 300ms ease-out, opacity 200ms ease-out;
+}
+
+.nav-link-chat:hover .nav-link-chat-options {
+  max-height: 36px;
+  margin-top: var(--space-2);
+  opacity: 1;
+}
+
+/* Rounded-square chip, same shape/radius as the footer's own social
+   icons (.social-icon in Footer.css, 4px radius) rather than the fully
+   circular .floating-back-to-top button - the footer's square icon tiles
+   are the closer match for a "contact icon" on this site. */
+.nav-link-chat-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+  border-radius: 4px;
+  background: var(--color-main-gold);
+  color: var(--color-white);
+  transition: background 150ms ease-out;
+}
+
+.nav-link-chat-icon:hover {
+  background: var(--color-main-yellow);
+}
+
+.nav-link-chat-icon svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* Case study sidebar (Figma node 435:25180): back-link, then a
+   TABLE OF CONTENTS label + section list, gap-[40px] between the two
+   groups and leading-normal throughout - distinct from the home
+   sidebar's own line-heights above. */
+.toc {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  line-height: normal;
+}
+
+.toc-back {
+  margin: 0;
+  font-family: var(--font-body-alt);
+  font-size: var(--text-body-md-size);
+  color: var(--color-black);
+  text-decoration: none;
+}
+
+.toc-back:hover {
+  text-decoration: underline;
+}
+
+/* 20px gap isn't on the base spacing scale (nearest tokens are 16px/24px)
+   but it's what Figma specifies, so it's kept literal. */
+.toc-group {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.toc-heading {
+  margin: 0;
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: var(--text-body-sm-size);
+  color: var(--color-text-muted);
+}
+
+.toc-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.toc-item {
+  display: block;
+  font-family: var(--font-body);
+  font-size: var(--text-body-sm-size);
+  color: var(--color-black);
+  text-decoration: none;
+}
+
+.toc-item:hover {
+  text-decoration: underline;
+}
+
+/* Sections not built yet, matching Figma's static muted state for
+   "Problem" / "Initial Assumptions". */
+.toc-item-muted {
+  color: var(--color-text-muted);
+}
+
+/* Floating back-to-top (no Figma node - functional addition, not a
+   design port): fixed to the viewport rather than the page, so it stays
+   reachable no matter how deep into a case study the reader has
+   scrolled. Background matches that case study's own footer fill (see
+   .site-footer-bioscent / .site-footer-cookpilot / .site-footer-
+   visualeyes in Footer.css and the matching class split in
+   FloatingBackToTop) rather than one fixed color, so the button reads
+   as that page's own accent. --color-main-gold here is just the base/
+   fallback for any future case study page that doesn't opt into its own
+   accent - all three current pages now have one. */
+.floating-back-to-top {
+  position: fixed;
+  right: var(--space-4);
+  bottom: var(--space-4);
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border: none;
+  border-radius: var(--radius-full);
+  background: var(--color-main-gold);
+  color: var(--color-white);
+  cursor: pointer;
+  opacity: 0;
+  transform: translateY(8px);
+  pointer-events: none;
+  transition: opacity 200ms ease-out, transform 200ms ease-out, filter 150ms ease-out;
+}
+
+.floating-back-to-top-bioscent {
+  background: var(--color-bioscent-green);
+}
+
+.floating-back-to-top-cookpilot {
+  background: var(--color-cookpilot-dark-orange);
+}
+
+.floating-back-to-top-visualeyes {
+  background: var(--color-visualeyes-dark-blue);
+}
+
+.floating-back-to-top.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+/* A brightness filter (rather than swapping to a fixed hover color)
+   works correctly across all three accent backgrounds above. */
+.floating-back-to-top:hover {
+  filter: brightness(1.12);
+}
+
+.floating-back-to-top svg {
+  width: 20px;
+  height: 20px;
+}
+
+/* ---------- Tablet (640px - 1024px) ---------- */
+
+@media (min-width: 640px) {
+  .sidebar-inner {
+    padding: var(--space-6) var(--space-5);
+  }
+}
+
+/* ---------- Desktop (1025px+) ---------- */
+
+@media (min-width: 1025px) {
+  .sidebar {
+    flex: 0 0 340px;
+    width: 340px;
+  }
+
+  /* Case study TOC sidebar (Figma node 435:25180, "Frame 305") is
+     280px, narrower than the home sidebar's 340px above - scoped so
+     only this variant is affected. */
+  .sidebar.sidebar-toc {
+    flex-basis: 280px;
+    width: 280px;
+  }
+
+  .sidebar-inner {
+    position: sticky;
+    top: 0;
+    padding: var(--space-7) var(--space-6);
+  }
+}

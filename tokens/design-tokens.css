@@ -31,6 +31,7 @@
   --color-bioscent-green: #73804a;
   --color-bioscent-green-light: #e4e5cd;
   --color-bioscent-forest: #323224;
+  --color-bioscent-beige: #f8f8ec; /* meta panel text on the green fill (node 432:22571/22573/22576) */
 
   /* ---------- Color: VisualEyes ---------- */
   --color-visualeyes-blue: #c6e7f6;
@@ -54,6 +55,8 @@
   --font-body: "TikTok Sans", sans-serif;    /* Figma: "TikTok Sans", Regular (400) */
   --font-body-alt: "Source Sans 3", sans-serif; /* used for case-study "Body"/"Body 2" styles */
   --font-subheader: "PT Serif", serif;          /* used for case-study "Subheader" style */
+  --font-mono: "Space Mono", monospace;          /* hover-caption labels (BioScent reflection collage) */
+  --font-placeholder-glyph: "Abhaya Libre", serif; /* "Next Case Study" card's "?" glyph only (HOME work-grid) */
 
   --font-weight-body: 400;
 
@@ -69,6 +72,7 @@
   --font-weight-h2: 500;
   --font-weight-h3: 500;
   --font-weight-h4: 400;
+  --font-weight-h5: 400;
 
   /* Display / Headers (shared across BioScent, VisualEyes, CookPilot) */
   --text-display-xl-size: 72px;
@@ -85,6 +89,9 @@
 
   --text-h4-size: 32px; /* was 24px; "HEADER/H4" now carries the values H3 used to have (32/Regular) - work-card-title moved onto this style as of the latest edit, separating it from the sidebar name (still H3, 40/Medium) */
   --text-h4-line-height: 1.2;
+
+  --text-h5-size: 28px; /* "HEADER/H5" - BioScent case-study section headings (e.g. 432:22588 "Where we started ?"), Regular weight */
+  --text-h5-line-height: 1.2;
 
   /* Body (shared) */
   --text-body-lg-size: 24px;

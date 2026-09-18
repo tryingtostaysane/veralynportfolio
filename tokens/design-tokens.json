@@ -21,7 +21,9 @@
       "bioscent": {
         "green": "#73804a",
         "greenLight": "#e4e5cd",
-        "forest": "#323224"
+        "forest": "#323224",
+        "beige": "#f8f8ec",
+        "_beigeNote": "meta panel text color on the green fill (node 432:22571/22573/22576)"
       },
       "visualEyes": {
         "blue": "#c6e7f6",
@@ -49,6 +51,7 @@
       "h2": 500,
       "h3": 500,
       "h4": 400,
+      "h5": 400,
       "body": 400,
       "_note": "These track live edits to the shared Figma text styles and have flipped more than once - re-check get_variable_defs before trusting this table. Current: Display XL = Regular (400); H1, H2 & H3 = Medium (500); H4 = Regular (400). H3 was 400 (Regular) at 32px until the latest edit changed the 'HEADER/H3' style itself to Medium (500) at 40px - it's now shared by the sidebar name and work-card-title."
     },
@@ -58,6 +61,7 @@
       "h2": { "size": 48, "lineHeight": 1.2, "weight": 500 },
       "h3": { "size": 40, "lineHeight": 1.2, "weight": 500, "note": "HOME sidebar name. The Hover-state Figma frames for work-card-title still show this size, but per explicit user direction the card title stays at h4 (below) in both default and hover states - only the awards/program panel appears on hover, the title itself doesn't resize." },
       "h4": { "size": 32, "lineHeight": 1.2, "weight": 400, "note": "was size 24; work-card-title, same size in both default and hover states." },
+      "h5": { "size": 28, "lineHeight": 1.2, "weight": 400, "note": "BioScent case-study section headings (e.g. 432:22588 'Where we started ?')." },
       "bodyLarge": { "size": 24, "lineHeight": 1.3 },
       "bodyMedium": { "size": 20, "lineHeight": 1.2 },
       "bodySmall": { "size": 16, "lineHeight": "normal", "family": "body", "note": "'PARA/Body' (471:1204 HOME): TikTok Sans 16px, letterSpacing 0. Used for sidebar location/role/bio/nav/contact copy, work-card meta/description, and (as of the latest footer edit) the footer nav row too, which moved off the 'subheader' style below. Figma's reported lineHeight 100 means 'Auto', not a literal 1.0 - confirmed by this style exporting as leading-normal everywhere it's used." },

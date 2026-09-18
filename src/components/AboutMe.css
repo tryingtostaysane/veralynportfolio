@@ -1,0 +1,416 @@
+/* About Me page. Shared case-study layout classes (.case-study,
+   .case-study-section, .case-study-section-intro, .case-study-tag,
+   .case-study-section-description) come from BioScent.css, which
+   defines them generically for reuse across every page that uses this
+   sidebar+main shell - see the comment on .case-study-tag there. Only
+   the pieces that differ for this page are defined below. */
+
+/* Tags component (node 622:1898) on the About page uses the sidebar's
+   own beige fill with black text, unlike BioScent's light-green
+   default (.case-study-tag) - same per-page override pattern as
+   CookPilot's .case-study-tag-cookpilot and VisualEyes'
+   .case-study-tag-visualeyes. */
+.case-study-tag-about {
+  background: var(--color-main-beige);
+  color: var(--color-black);
+}
+
+/* "A little about me." (node 622:1896): tag, then heading+description,
+   then the 3-photo collage - gap-[40px] between the two blocks. */
+.case-study-about-intro {
+  gap: var(--space-6);
+}
+
+/* Node 622:1900: gap-[8px] between the heading and its description -
+   tighter than the 16px .case-study-section-intro gap above it, same
+   pattern as VisualEyes' .case-study-visualeyes-heading-group. */
+.case-study-about-heading-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  width: 100%;
+}
+
+/* This page's own heading (node 622:1901) doubles as the page's <h1>
+   since, unlike the case-study pages, there is no separate hero
+   banner/title above it - but the latest Figma edit sizes it the same
+   28px/Regular (H5 style) as every other header on this page (this
+   was previously a 40px/Medium H3 override, out of sync with the rest
+   of the page). Kept as its own class rather than reusing
+   .case-study-section-heading directly since it also carries width:100%
+   for the page's own layout. */
+.case-study-about-heading {
+  margin: 0;
+  width: 100%;
+  font-family: var(--font-heading);
+  font-weight: var(--font-weight-h5);
+  font-size: var(--text-h5-size);
+  line-height: var(--text-h5-line-height);
+  color: var(--color-black);
+  font-optical-sizing: var(--font-optical-sizing-heading);
+  font-variation-settings: var(--font-variation-heading);
+}
+
+/* 3-photo collage (node 622:1904): same "flex row, equal-fill tiles,
+   literal Figma gap/radius, one representative aspect-ratio" pattern
+   as .case-study-reflection-collage-row in BioScent.css - just this
+   page's own (near-identical) literal gap/radius/ratio values. */
+.case-study-about-collage {
+  display: flex;
+  gap: var(--space-1);
+  width: 100%;
+}
+
+/* Wrapper for each collage photo - hosts the cursor-following caption
+   pop-up (.case-study-about-collage-caption below), same
+   "sizing lives on the wrapper, <img> just fills it" split as
+   .case-study-reflection-collage-item in BioScent.css. */
+.case-study-about-collage-item {
+  position: relative;
+  flex: 1 1 0%;
+  min-width: 0;
+  width: 100%;
+  aspect-ratio: 211 / 226;
+  overflow: hidden;
+  border-radius: 9.4px;
+  cursor: default;
+}
+
+.case-study-about-collage-photo {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Cursor-following hover caption - user-supplied captions (not in Figma),
+   same positioning/transition technique as
+   .case-study-reflection-collage-caption in BioScent.css and this page's
+   own .case-study-about-playlist-caption below. */
+.case-study-about-collage-caption {
+  position: absolute;
+  top: 0;
+  left: 0;
+  max-width: min(220px, 80%);
+  padding: 8px 14px;
+  background: rgba(23, 23, 20, 0.92);
+  border-radius: 4px;
+  color: var(--color-white);
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  line-height: 1.4;
+  pointer-events: none;
+  z-index: 2;
+  opacity: 0;
+  transform: translate(16px, -120%) scale(0.96);
+  transition: opacity 0.35s cubic-bezier(0.65, 0, 0.35, 1), transform 0.35s cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+.case-study-about-collage-caption.is-visible {
+  opacity: 1;
+  transform: translate(16px, -130%) scale(1);
+}
+
+/* "Fun Fact About Me" (node 653:1095): tag + heading-group only, no
+   second block below it (unlike .case-study-about-intro/-playlist), so
+   the section needs no extra gap override - .case-study-section-intro's
+   own 16px gap is enough. Reuses .case-study-about-heading-group for
+   the heading+list gap-[8px] pairing, same as the intro section's
+   heading+description. */
+.case-study-about-fun-facts-list {
+  margin: 0;
+  padding-left: 24px;
+  width: 100%;
+  font-family: var(--font-body);
+  font-weight: var(--font-weight-body);
+  font-size: var(--text-body-sm-size);
+  line-height: var(--text-body-sm-line-height);
+  color: var(--color-black);
+}
+
+.case-study-about-fun-facts-list li {
+  margin: 0;
+}
+
+/* "Playlist" (node 640:2166): tag+description block, then the 3
+   embeds - gap-[40px], same shell as .case-study-about-intro. */
+.case-study-about-playlist {
+  gap: var(--space-6);
+}
+
+/* Same "flex row, equal-fill tiles, literal Figma gap/radius" shape as
+   .case-study-about-collage above, but each tile is a real Spotify
+   embed (see PlaylistCard in AboutMe.jsx) rather than an <img>, so it
+   needs position:relative (for the hover caption) and overflow:hidden
+   (radius doesn't clip an iframe child on its own) instead of resting
+   on object-fit. */
+.case-study-about-playlist-grid {
+  display: flex;
+  gap: var(--space-1);
+  width: 100%;
+}
+
+.case-study-about-playlist-item {
+  position: relative;
+  flex: 1 1 0%;
+  min-width: 0;
+  width: 100%;
+  aspect-ratio: 131 / 132;
+  overflow: hidden;
+  border-radius: 9.4px;
+  cursor: pointer;
+}
+
+.case-study-about-playlist-embed {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+/* Cursor-following hover caption - same positioning/transition
+   technique as .case-study-reflection-collage-caption in
+   BioScent.css, kept as this page's own class since AboutMe has no
+   existing caption pattern to reuse. */
+.case-study-about-playlist-caption {
+  position: absolute;
+  top: 0;
+  left: 0;
+  max-width: min(220px, 80%);
+  padding: 8px 14px;
+  background: rgba(23, 23, 20, 0.92);
+  border-radius: 4px;
+  color: var(--color-white);
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  line-height: 1.4;
+  pointer-events: none;
+  z-index: 2;
+  opacity: 0;
+  transform: translate(16px, -120%) scale(0.96);
+  transition: opacity 0.35s cubic-bezier(0.65, 0, 0.35, 1), transform 0.35s cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+.case-study-about-playlist-caption.is-visible {
+  opacity: 1;
+  transform: translate(16px, -130%) scale(1);
+}
+
+/* "Little Things That I Am Proud Of" (node 622:1918): the Figma frame
+   flattens everything - tag, "Missing Perspective" heading, article
+   link, article screenshot, "Awards" heading, and the awards grid - into
+   one column with a uniform gap-[16px] between all six, rather than
+   grouping the article and awards as separate sub-blocks. Kept literal
+   to match, even though it reads a little flat semantically. */
+.case-study-about-proud-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  width: 100%;
+}
+
+/* Not in Figma (which has no real hyperlink, just visual text) - the
+   "Read the article here" line and its screenshot are wrapped in one
+   real link to missingperspectives.com. Reset to plain-text styling
+   (color: inherit, no underline) same as .work-card in Home.css, with
+   an underline only on the caption on hover as the sole affordance. */
+.case-study-about-proud-link {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  width: 100%;
+  color: inherit;
+  text-decoration: none;
+}
+
+.case-study-about-proud-link:hover .case-study-section-description {
+  text-decoration: underline;
+}
+
+/* Article screenshot (node 622:1925): Figma's own asset is exactly
+   3418x1538 (~2.22:1), used as-is. */
+.case-study-about-proud-screenshot {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 3418 / 1538;
+  object-fit: cover;
+  border-radius: var(--radius-card);
+}
+
+/* Awards grid (node 622:2026): 3 filled cells in a 2-column grid (the
+   4th, 2nd-row-2nd-column cell is empty in Figma) - stacked by default,
+   2 columns at desktop, same responsive convention as the multi-column
+   grids on the VisualEyes case study. */
+.case-study-about-awards-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-3);
+  width: 100%;
+}
+
+.case-study-about-award-item {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  width: 100%;
+}
+
+.case-study-about-award-caption {
+  margin: 0;
+  font-family: var(--font-body);
+  font-weight: var(--font-weight-body);
+  font-size: var(--text-body-sm-size);
+  line-height: var(--text-body-sm-line-height);
+  color: var(--color-black);
+}
+
+/* Wrapper for each award photo - hosts the cursor-following caption
+   pop-up (.case-study-about-award-hover-caption below), same
+   "sizing lives on the wrapper, <img> just fills it" split as
+   .case-study-about-collage-item above. Figma's own asset is 401x300
+   (~1.34:1) for all 3 award photos. */
+.case-study-about-award-photo {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 401 / 300;
+  overflow: hidden;
+  border-radius: var(--radius-card);
+  cursor: default;
+}
+
+.case-study-about-award-image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Cursor-following hover caption - user-supplied captions (not in Figma),
+   same positioning/transition technique as
+   .case-study-about-collage-caption above. */
+.case-study-about-award-hover-caption {
+  position: absolute;
+  top: 0;
+  left: 0;
+  max-width: min(220px, 80%);
+  padding: 8px 14px;
+  background: rgba(23, 23, 20, 0.92);
+  border-radius: 4px;
+  color: var(--color-white);
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  line-height: 1.4;
+  pointer-events: none;
+  z-index: 2;
+  opacity: 0;
+  transform: translate(16px, -120%) scale(0.96);
+  transition: opacity 0.35s cubic-bezier(0.65, 0, 0.35, 1), transform 0.35s cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+.case-study-about-award-hover-caption.is-visible {
+  opacity: 1;
+  transform: translate(16px, -130%) scale(1);
+}
+
+@media (min-width: 1025px) {
+  .case-study-about-awards-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* "'26 Favourites!" (node 622:1937), the last section on the page:
+   tag+heading intro, then the photo grid - gap-[40px] between the two,
+   reusing .case-study-section-intro as-is for the intro (its gap-[16px]
+   matches node 622:1940 exactly). */
+.case-study-about-favourites {
+  gap: var(--space-6);
+}
+
+/* Photo grid (node 622:1943): 3 columns, 5 photos (the 6th, 2nd-row-3rd-
+   column cell is empty in Figma) - stacked by default, 3 columns at
+   desktop, same responsive convention as .case-study-about-awards-grid
+   above. */
+.case-study-about-favourites-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-3);
+  width: 100%;
+}
+
+/* Wrapper for each favourites photo - hosts the cursor-following caption
+   pop-up (.case-study-about-favourites-caption below), same
+   "sizing lives on the wrapper, <img> just fills it" split as
+   .case-study-about-collage-item/.case-study-about-award-photo above.
+   Figma's own tiles are a fixed 265x198 (~1.34:1), radius-[8px]. */
+.case-study-about-favourites-item {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 265 / 198;
+  overflow: hidden;
+  border-radius: 8px;
+  cursor: default;
+}
+
+.case-study-about-favourites-image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Cursor-following hover caption - user-supplied captions (not in Figma),
+   same positioning/transition technique as
+   .case-study-about-collage-caption above. */
+.case-study-about-favourites-caption {
+  position: absolute;
+  top: 0;
+  left: 0;
+  max-width: min(220px, 80%);
+  padding: 8px 14px;
+  background: rgba(23, 23, 20, 0.92);
+  border-radius: 4px;
+  color: var(--color-white);
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  line-height: 1.4;
+  pointer-events: none;
+  z-index: 2;
+  opacity: 0;
+  transform: translate(16px, -120%) scale(0.96);
+  transition: opacity 0.35s cubic-bezier(0.65, 0, 0.35, 1), transform 0.35s cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+.case-study-about-favourites-caption.is-visible {
+  opacity: 1;
+  transform: translate(16px, -130%) scale(1);
+}
+
+@media (min-width: 1025px) {
+  .case-study-about-favourites-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* Matches the "tighten to 40px vertical padding at desktop" treatment
+   every non-hero BioScent/CookPilot/VisualEyes section uses (see
+   BioScent.css) - Figma states py-[40px] here too, not the standard
+   80px inset. */
+@media (min-width: 1025px) {
+  .case-study-about-intro,
+  .case-study-about-fun-facts,
+  .case-study-about-playlist,
+  .case-study-about-proud,
+  .case-study-about-favourites {
+    padding-top: var(--space-6);
+    padding-bottom: var(--space-6);
+  }
+}
