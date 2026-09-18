@@ -632,6 +632,28 @@
   border-radius: 20px;
 }
 
+.case-study-ecosystem-diagram-frame {
+  width: 100%;
+}
+
+/* Below desktop, the diagram's labels become illegible once shrunk to
+   fit the page's own width - instead of shrinking with the page, it
+   holds a fixed, legible pixel width (roughly what it renders at on
+   desktop) and scrolls horizontally within its own frame. The frame
+   (not the image itself) owns the scroll so this stays contained to
+   the diagram rather than the page. */
+@media (max-width: 1024px) {
+  .case-study-ecosystem-diagram-frame {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .case-study-ecosystem-diagram {
+    width: 800px;
+    max-width: none;
+  }
+}
+
 /* "User Journey" (Figma node 555:2150): tag, then the two Before/After
    tracks stacked gap-40 apart - each its own heading + a static 5-card
    row (no carousel; 5 steps fit the row without scrolling).

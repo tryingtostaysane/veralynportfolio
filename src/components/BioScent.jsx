@@ -516,7 +516,13 @@ export default function BioScent() {
                   Personal Intelligence
                 </h2>
               </div>
-              <img className="case-study-ecosystem-diagram" src={ecosystemDiagram} alt="Diagram of the BioScent ecosystem: data sources and wearables feed the central BioScent hub, which shares insights and alerts with the health ecosystem, all under oversight & governance and powered by system intelligence in a continuous learning loop" />
+              <div className="case-study-ecosystem-diagram-frame">
+                <img
+                  className="case-study-ecosystem-diagram"
+                  src={ecosystemDiagram}
+                  alt="Diagram of the BioScent ecosystem: data sources and wearables feed the central BioScent hub, which shares insights and alerts with the health ecosystem, all under oversight & governance and powered by system intelligence in a continuous learning loop"
+                />
+              </div>
             </div>
           </section>
           <section className="case-study-section case-study-journey" aria-label="User Journey" id="user-journey">
