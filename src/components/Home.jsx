@@ -171,7 +171,14 @@ function WorkCard({
           <ProjectThumbnail image={image} cookingInstructions={cookingInstructions} skyFrames={skyFrames} detectionPoint={detectionPoint} />
         )}
         <div className="work-card-heading">
-          <h2 className="work-card-title">{title}</h2>
+          <div className="work-card-title-row">
+            <h2 className="work-card-title">{title}</h2>
+            {reveal && (
+              <span className="work-card-tap-hint" aria-hidden="true">
+                {`* ${caption} *`}
+              </span>
+            )}
+          </div>
           <p className="work-card-description">{description}</p>
         </div>
       </div>

@@ -91,9 +91,48 @@
   transition: opacity 0.28s cubic-bezier(0.16, 1, 0.3, 1), transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.work-card-cursor-caption.is-visible {
-  opacity: 1;
-  transform: translate(16px, -130%) scale(1);
+/* Real-hover pointers only: on touch this tag's position comes from raw
+   mouse-move coordinates (see updatePos in Home.jsx), which touch's
+   synthetic mouse events set to wherever you tapped and never clean up -
+   letting it show there spills it outside the card (see .work-card-tap-hint
+   below for the touch equivalent instead). */
+@media (hover: hover) and (pointer: fine) {
+  .work-card-cursor-caption.is-visible {
+    opacity: 1;
+    transform: translate(16px, -130%) scale(1);
+  }
+}
+
+.work-card-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+/* Touch's static equivalent of the hover caption above: no mouse position
+   to follow, so instead of floating, it sits in-flow next to the title -
+   only shown once .is-revealed is set (WorkCard's first-tap gesture),
+   signalling that a second tap on the now-open card navigates. Never set
+   on desktop (is-revealed only comes from the coarse-pointer tap path in
+   Home.jsx), so no extra media query needed here. */
+.work-card-tap-hint {
+  display: none;
+  flex-shrink: 0;
+  padding: 8px 14px;
+  background: rgba(23, 23, 20, 0.92);
+  border-radius: 4px;
+  color: var(--color-white);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  line-height: 1.4;
+  white-space: nowrap;
+}
+
+.work-card.is-revealed .work-card-tap-hint {
+  display: inline-flex;
 }
 
 .work-card-media {
