@@ -3,7 +3,6 @@ import Sidebar from './Sidebar.jsx'
 import Footer from './Footer.jsx'
 import ProjectThumbnail from './ProjectThumbnail.jsx'
 import SectionVideo from './SectionVideo.jsx'
-import ImageLightbox from './ImageLightbox.jsx'
 import { bioscentHeroImg, BIOSCENT_HERO_ASPECT_RATIO, BIOSCENT_HERO_DETECTION_POINT } from '../data/projectThumbnails.js'
 import researchBg from '../assets/case-studies/bioscent/research-bg.jpg'
 import researchScreenshot1 from '../assets/case-studies/bioscent/research-screenshot-1.png'
@@ -517,11 +516,7 @@ export default function BioScent() {
                   Personal Intelligence
                 </h2>
               </div>
-              <ImageLightbox
-                className="case-study-ecosystem-diagram"
-                src={ecosystemDiagram}
-                alt="Diagram of the BioScent ecosystem: data sources and wearables feed the central BioScent hub, which shares insights and alerts with the health ecosystem, all under oversight & governance and powered by system intelligence in a continuous learning loop"
-              />
+              <img className="case-study-ecosystem-diagram" src={ecosystemDiagram} alt="Diagram of the BioScent ecosystem: data sources and wearables feed the central BioScent hub, which shares insights and alerts with the health ecosystem, all under oversight & governance and powered by system intelligence in a continuous learning loop" />
             </div>
           </section>
           <section className="case-study-section case-study-journey" aria-label="User Journey" id="user-journey">
