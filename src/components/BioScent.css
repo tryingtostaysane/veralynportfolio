@@ -1181,6 +1181,30 @@
   color: var(--color-black);
 }
 
+/* ---------- Mobile & tablet (below 1025px) ---------- */
+
+/* Below desktop, lay the meta panel out as a 2-column grid (Role/Team,
+   Skills/Awards side by side) instead of one long full-width stack -
+   matches the desktop column grouping, just narrower. Tightened
+   horizontal padding makes room for two columns at phone widths; only
+   left/right are touched so per-project vertical overrides (e.g.
+   .case-study-meta-visualeyes) still apply. */
+@media (max-width: 1024px) {
+  .case-study-meta {
+    flex-direction: row;
+    flex-wrap: wrap;
+    column-gap: var(--space-4);
+    row-gap: var(--space-5);
+    padding-left: var(--space-4);
+    padding-right: var(--space-4);
+  }
+
+  .case-study-meta-column {
+    flex: 1 1 0;
+    min-width: 0;
+  }
+}
+
 /* ---------- Tablet (640px - 1024px) ---------- */
 
 @media (min-width: 640px) {
