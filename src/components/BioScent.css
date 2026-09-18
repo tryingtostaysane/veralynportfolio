@@ -963,14 +963,12 @@
    frame's proportions, so the frame and the recording scale
    independently of each other.
 
-   The bezel is a literal, equal px value on all 4 sides (not
-   percentage padding) - CSS always resolves percentage padding against
-   the containing block's WIDTH, on every side, which is what made the
-   old top/bottom bezel come out a different thickness than the sides.
-   The inner screen no longer adds its own extra left/right padding on
-   top of that (the old source of the uneven/thick side borders) - its
-   radius is simply the frame's outer radius minus the bezel, so the
-   two stay concentric at any size. */
+   The bezel is a literal, equal px value on all 4 sides: the frame has
+   no padding of its own, and .solution-phone-screen below fills it via
+   position:absolute + inset:14px rather than width/height:100%, so the
+   bezel stays equal on every side regardless of how percentage padding
+   would otherwise resolve, and its radius is simply the frame's outer
+   radius minus the bezel so the two stay concentric at any size. */
 .solution-phone {
   position: relative;
   width: 100%;
@@ -979,7 +977,6 @@
   background: var(--color-bioscent-forest);
   border: 2px solid rgba(255, 255, 255, 0.08);
   border-radius: 54px;
-  padding: 14px;
   box-sizing: border-box;
   box-shadow: 0 20px 40px -20px rgba(50, 50, 36, 0.4);
   /* Backstop for the .solution-phone-screen clip below - mobile Safari
@@ -1007,9 +1004,13 @@
 }
 
 .solution-phone-screen {
-  position: relative;
-  width: 100%;
-  height: 100%;
+  /* Filling the parent via absolute+inset (rather than height:100%,
+     which depends on percentage-height correctly cascading through
+     .solution-phone's aspect-ratio-computed height) is the more robust
+     way to reliably fill "the phone frame minus its bezel" regardless
+     of how that ancestor's own height was established. */
+  position: absolute;
+  inset: 14px;
   box-sizing: border-box;
   border-radius: 40px; /* outer 54px radius minus the 14px bezel, concentric */
   overflow: hidden;
